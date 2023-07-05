@@ -2,6 +2,9 @@
 #include <complex.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xos.h>
 
 #include "include/config.h"
 
@@ -37,12 +40,12 @@ void drawTrajs(params_t params, complex* trajs){
 	XFillRectangle (dpy, root, g, 0, 0, wa.width, wa.height);
 
 	XSetForeground(dpy, g, whites.pixel);
-	for (int i = 0; i < params.maxit; i++){
+	for (int i = 0; i < params.maxiter; i++){
 		if (creal(trajs[i]) == -10) break;
 		float x = map(cimag(trajs[i]), -0.5, 0.5, 0, wa.width);
 		float y = map(creal(trajs[i]), -0.35, 0.65, 0, wa.height);
 
-		XDrawPoint(dpy, root, g, x, y, 0);
+		XDrawPoint(dpy, root, g, x, y);
 	}
 }
 
