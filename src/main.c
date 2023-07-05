@@ -14,14 +14,15 @@
 #define MAX_SOURCE_SIZE (0x100000)
 
 int main(){
-	//Hyperparameters read from the config file
 	t_params parameters; 
-	t_params* p_parameters;
-
-	readConf(p_parameters);
+	parameters.resx = 4960;
+	parameters.resx = 7106;
+	parameters.npoints = 1000;
+	parameters.maxit = 1e6;
+	parameters.n_kernels = 32;
 
 
 	srand(time(NULL));
 
-	mandelIterOpenCL(params);
+	buddhaCPU(parameters);
 }
