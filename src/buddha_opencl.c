@@ -10,32 +10,32 @@
 
 #define MAX_SOURCE_SIZE (0x100000)
 
-void mandelIterOpenCL(t_params* p_params){
+void mandelIterOpenCL(params_t params){
 	// Allocate memories 
 	//We can't pass a 2D array to a kernel, so we'll flatten a 2d array to 1D
 	size_t globalItemSize = 32;
 	size_t localItemSize = 16; // globalItemSize has to be a multiple of localItemSize. 
-	float *trajectoriesA = (float*)malloc(sizeof(float) * p_params.n_kernels * p_params.maxiter);
-	float *trajectoriesB = (float*)malloc(sizeof(float) * p_params.n_kernels * p_params.maxiter);
+	float *trajectoriesA = (float*)malloc(sizeof(float) * params.n_kernels * params.maxiter);
+	float *trajectoriesB = (float*)malloc(sizeof(float) * params.n_kernels * params.maxiter);
 
-	float *randomPointsA = (float*)malloc(sizeof(float) * p_params.n_kernels);
-	float *randomPointsB = (float*)malloc(sizeof(float) * p_params.n_kernels);
-	float *randomPointsC = (float*)malloc(sizeof(float) * p_params.n_kernels);
-	float *randomPointsD = (float*)malloc(sizeof(float) * p_params.n_kernels);
+	float *randomPointsA = (float*)malloc(sizeof(float) * params.n_kernels);
+	float *randomPointsB = (float*)malloc(sizeof(float) * params.n_kernels);
+	float *randomPointsC = (float*)malloc(sizeof(float) * params.n_kernels);
+	float *randomPointsD = (float*)malloc(sizeof(float) * params.n_kernels);
 
-	float **histogram = malloc(p_params.resx * sizeof(float *));
-	for (int i =0; i < p_params.resx; i++) {
-		histogram[i] = (float *)malloc(p_params.resy * sizeof(float)); 
+	float **histogram = malloc(params.resx * sizeof(float *));
+	for (int i =0; i < params.resx; i++) {
+		histogram[i] = (float *)malloc(params.resy * sizeof(float)); 
 	}
 
 	FILE *kernelFile;
 	char *kernelSource;
 	size_t kernelSize;
 
-	kernelFile = fopen(*p_params.kernelFilename, "r");
+	kernelFile = fopen(*params.kernel_filename, "r");
 
 	if (!kernelFile) {
-		fprintf(stderr, "No file named %s was found !\n", kernelFilename);
+		fprintf(stderr, "No file named %s was found !\n", params.kernel_filename);
 		exit(-1);
 	}
 
@@ -58,13 +58,13 @@ void mandelIterOpenCL(t_params* p_params){
 	cl_command_queue commandQueue = clCreateCommandQueue(context, deviceID, 0, &ret);
 
 	// Memory buffers for each array
-	cl_mem randPtsAMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  p_params.n_kernels * sizeof(float), NULL, &ret);
-	cl_mem randPtsBMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  p_params.n_kernels * sizeof(float), NULL, &ret);
-	cl_mem randPtsCMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  p_params.n_kernels * sizeof(float), NULL, &ret);
-	cl_mem randPtsDMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  p_params.n_kernels * sizeof(float), NULL, &ret);
+	cl_mem randPtsAMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  params.n_kernels * sizeof(float), NULL, &ret);
+	cl_mem randPtsBMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  params.n_kernels * sizeof(float), NULL, &ret);
+	cl_mem randPtsCMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  params.n_kernels * sizeof(float), NULL, &ret);
+	cl_mem randPtsDMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  params.n_kernels * sizeof(float), NULL, &ret);
 
-	cl_mem trajAMemObj = clCreateBuffer(context, CL_MEM_WRITE_ONLY, p_params.n_kernels * p_params.maxiter * sizeof(float), NULL, &ret);
-	cl_mem trajBMemObj = clCreateBuffer(context, CL_MEM_WRITE_ONLY, p_params.n_kernels * p_params.maxiter * sizeof(float), NULL, &ret);
+	cl_mem trajAMemObj = clCreateBuffer(context, CL_MEM_WRITE_ONLY, params.n_kernels * params.maxiter * sizeof(float), NULL, &ret);
+	cl_mem trajBMemObj = clCreateBuffer(context, CL_MEM_WRITE_ONLY, params.n_kernels * params.maxiter * sizeof(float), NULL, &ret);
 
 	// Create program from kernel source
 	cl_program program = clCreateProgramWithSource(context, 1, (const char **)&kernelSource, (const size_t *)&kernelSize, &ret);	
@@ -89,25 +89,24 @@ void mandelIterOpenCL(t_params* p_params){
 	// Create kernel
 	cl_kernel kernel = clCreateKernel(program, "buddhaTraj", &ret);
 
-
+	int iter = 0;
 	while(1){
-		for (int i = 0; i < p_params.n_kernels; i++){
+		for (int i = 0; i < params.n_kernels; i++){
 			randomPointsA[i] = float_rand(-2.0, 2.0);
 			randomPointsB[i] = float_rand(-2.0, 2.0);
 			randomPointsC[i] = float_rand(-2.0, 2.0);
 			randomPointsD[i] = float_rand(-2.0, 2.0);
 		}
 		// Copy lists to memory buffers
-		ret = clEnqueueWriteBuffer(commandQueue, randPtsAMemObj, CL_TRUE, 0, p_params.n_kernels * sizeof(float), randomPointsA, 0, NULL, NULL);;
-		ret = clEnqueueWriteBuffer(commandQueue, randPtsBMemObj, CL_TRUE, 0, p_params.n_kernels * sizeof(float), randomPointsB, 0, NULL, NULL);;
-		ret = clEnqueueWriteBuffer(commandQueue, randPtsCMemObj, CL_TRUE, 0, p_params.n_kernels * sizeof(float), randomPointsC, 0, NULL, NULL);;
-		ret = clEnqueueWriteBuffer(commandQueue, randPtsDMemObj, CL_TRUE, 0, p_params.n_kernels * sizeof(float), randomPointsD, 0, NULL, NULL);;
+		ret = clEnqueueWriteBuffer(commandQueue, randPtsAMemObj, CL_TRUE, 0, params.n_kernels * sizeof(float), randomPointsA, 0, NULL, NULL);;
+		ret = clEnqueueWriteBuffer(commandQueue, randPtsBMemObj, CL_TRUE, 0, params.n_kernels * sizeof(float), randomPointsB, 0, NULL, NULL);;
+		ret = clEnqueueWriteBuffer(commandQueue, randPtsCMemObj, CL_TRUE, 0, params.n_kernels * sizeof(float), randomPointsC, 0, NULL, NULL);;
+		ret = clEnqueueWriteBuffer(commandQueue, randPtsDMemObj, CL_TRUE, 0, params.n_kernels * sizeof(float), randomPointsD, 0, NULL, NULL);;
 		if (ret < 0){
 			printf("OpenCL Error ! %d\n", ret);
 			exit(ret);
 		}
 
-		int maxiter = p_params.maxiter;
 		// Set arguments for kernel
 		ret = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *)&randPtsAMemObj);	
 		ret = clSetKernelArg(kernel, 1, sizeof(cl_mem), (void *)&randPtsBMemObj);	
@@ -129,20 +128,20 @@ void mandelIterOpenCL(t_params* p_params){
 		}
 
 		// Read from device back to host.
-		ret = clEnqueueReadBuffer(commandQueue, trajAMemObj, CL_TRUE, 0, p_params.n_kernels * p_params.maxiter * sizeof(float), trajectoriesA, 0, NULL, NULL);
-		ret = clEnqueueReadBuffer(commandQueue, trajBMemObj, CL_TRUE, 0, p_params.n_kernels * p_params.maxiter * sizeof(float), trajectoriesB, 0, NULL, NULL);
+		ret = clEnqueueReadBuffer(commandQueue, trajAMemObj, CL_TRUE, 0, params.n_kernels * params.maxiter * sizeof(float), trajectoriesA, 0, NULL, NULL);
+		ret = clEnqueueReadBuffer(commandQueue, trajBMemObj, CL_TRUE, 0, params.n_kernels * params.maxiter * sizeof(float), trajectoriesB, 0, NULL, NULL);
 		if (ret < 0){
 			printf("OpenCL Error ! %d\n", ret);
 			exit(ret);
 		}
 
 		int x, y;
-		for(int i = 0; i < p_params.n_kernels; i++){
-			for(int j = 0; j < p_params.maxiter; j++){
-				if (trajectoriesA[j + p_params.maxiter * i] == -10) break;
-				x = (int)map(trajectoriesB[j + p_params.maxiter * i], -0.5, 0.5, 0, p_params.resx);	
-				y = (int)map(trajectoriesA[j + p_params.maxiter * i], -0.35 * sqr2, 0.65 * sqr2, 0, p_params.resy);	
-				if (x >= 0 && x < p_params.resx && y >= 0 && y < p_params.resy){
+		for(int i = 0; i < params.n_kernels; i++){
+			for(int j = 0; j < params.maxiter; j++){
+				if (trajectoriesA[j + params.maxiter * i] == -10) break;
+				x = (int)map(trajectoriesB[j + params.maxiter * i], -0.5, 0.5, 0, params.resx);	
+				y = (int)map(trajectoriesA[j + params.maxiter * i], -0.35 * sqrt(2), 0.65 * sqrt(2), 0, params.resy);	
+				if (x >= 0 && x < params.resx && y >= 0 && y < params.resy){
 					histogram[x][y]++;
 				}
 			}
@@ -150,9 +149,10 @@ void mandelIterOpenCL(t_params* p_params){
 		//TODO: Catch interrupts
 		if (iter % 1000 == 1){
 			//TODO:
-			writeCheckpoint(histogram, p_params);
+			writeCheckpoint(histogram, params);
 			drawTrajs(params, histogram);
 		}
+		iter++;
 	}
 	ret = clReleaseCommandQueue(commandQueue);
 	ret = clReleaseKernel(kernel);
@@ -168,34 +168,4 @@ void mandelIterOpenCL(t_params* p_params){
 	free(trajectoriesB);
 	free(randomPointsA);
 	free(randomPointsB);
-}
-
-void buddhaCPU(t_params params){
-	uint32_t histogram[params.resx][params.resy];
-	complex trajs[params.maxit];
-
-	while(1){
-		complex r = rand_complex(-2 - 2 * I, 2 + 2 * I);
-		trajs[0] = rand_complex(-2 - 2 * I, 2 + 2 * I);
-		for (int i = 1; i < params.maxit; i++){
-			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
-			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
-		}
-
-		drawTrajs(params, trajs);
-
-		for(int i = 0; i < params.maxit; i++){
-			int x = (int)map(creal(trajs[i]), -0.5, 0.5, 0, params.resx);
-			int y = (int)map(cimag(trajs[i]), -0.35 * sqrt(2), 0.65 * sqrt(2), 0, params.resy);	
-			if (x >= 0 && x < params.resx && y >= 0 && y < params.resy){
-				histogram[x][y]++;
-			}
-		}
-
-		if (iter % params.npoint == 1){
-			writeCheckpoint(histogram, params);
-		}
-	}
-
-
 }
