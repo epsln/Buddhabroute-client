@@ -1,8 +1,9 @@
 #ifndef readFiles 
 #define readFiles 
-#include "'config.h"
+#include "config.h"
+#include <stdlib.h>
 
-void readCheckpoint(t_params* p_params);
-void writeCheckpoint(t_params* p_params);
+void readCheckpoint(params_t params);
+void writeCheckpoint(params_t params, u_int32_t histogram);
 
 #endif
