@@ -1,0 +1,7 @@
+*.o
+*.dep
+*.bmp
+bin/*
+*.swp
+*.swo
+buddha
