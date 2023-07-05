@@ -22,11 +22,9 @@ void mandelIterOpenCL(t_params* p_params){
 	float *randomPointsC = (float*)malloc(sizeof(float) * p_params.n_kernels);
 	float *randomPointsD = (float*)malloc(sizeof(float) * p_params.n_kernels);
 
-	float **bmpArr = malloc(p_params.resx * sizeof(float *));
 	float **histogram = malloc(p_params.resx * sizeof(float *));
 	for (int i =0; i < p_params.resx; i++) {
 		histogram[i] = (float *)malloc(p_params.resy * sizeof(float)); 
-		bmpArr[i] = (float *)malloc(p_params.resy * sizeof(float)); 
 	}
 
 	FILE *kernelFile;
@@ -64,7 +62,6 @@ void mandelIterOpenCL(t_params* p_params){
 	cl_mem randPtsCMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  p_params.n_kernels * sizeof(float), NULL, &ret);
 	cl_mem randPtsDMemObj = clCreateBuffer(context, CL_MEM_READ_ONLY,  p_params.n_kernels * sizeof(float), NULL, &ret);
 
-
 	cl_mem trajAMemObj = clCreateBuffer(context, CL_MEM_WRITE_ONLY, p_params.n_kernels * p_params.maxiter * sizeof(float), NULL, &ret);
 	cl_mem trajBMemObj = clCreateBuffer(context, CL_MEM_WRITE_ONLY, p_params.n_kernels * p_params.maxiter * sizeof(float), NULL, &ret);
 
@@ -89,7 +86,6 @@ void mandelIterOpenCL(t_params* p_params){
 	}
 
 	// Create kernel
-
 	cl_kernel kernel = clCreateKernel(program, "buddhaTraj", &ret);
 
 
