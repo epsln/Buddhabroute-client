@@ -1,7 +1,8 @@
 #include "include/bmp.h"
 #include "include/math_utils.h"
 #include "include/readFiles.h"
-#include "include/mandel.h"
+#include "include/config.h"
+#include "include/buddha_cpu.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,14 +12,18 @@
 #include <config.h>
 #include <CL/cl.h>
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xos.h>
+
 #define MAX_SOURCE_SIZE (0x100000)
 
 int main(){
-	t_params parameters; 
+	params_t parameters; 
 	parameters.resx = 4960;
 	parameters.resx = 7106;
 	parameters.n_points = 1000;
-	parameters.maxit = 1e6;
+	parameters.maxiter = 1e6;
 	parameters.n_kernels = 32;
 
 	Display *dpy;
