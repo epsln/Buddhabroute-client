@@ -1,6 +1,7 @@
 #include "include/math_utils.h"
 #include "include/config.h"
 #include "include/bmp.h"
+#include "include/readFiles.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -149,8 +150,8 @@ void mandelIterOpenCL(t_params* p_params){
 		//TODO: Catch interrupts
 		if (iter % 1000 == 1){
 			//TODO:
-			saveCheckpoint(histogram, p_params);
-			plotTraj(histogram);
+			writeCheckpoint(histogram, p_params);
+			drawTrajs(params, histogram);
 		}
 	}
 	ret = clReleaseCommandQueue(commandQueue);
@@ -167,4 +168,34 @@ void mandelIterOpenCL(t_params* p_params){
 	free(trajectoriesB);
 	free(randomPointsA);
 	free(randomPointsB);
+}
+
+void buddhaCPU(t_params params){
+	uint32_t histogram[params.resx][params.resy];
+	complex trajs[params.maxit];
+
+	while(1){
+		complex r = rand_complex(-2 - 2 * I, 2 + 2 * I);
+		trajs[0] = rand_complex(-2 - 2 * I, 2 + 2 * I);
+		for (int i = 1; i < params.maxit; i++){
+			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
+			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
+		}
+
+		drawTrajs(params, trajs);
+
+		for(int i = 0; i < params.maxit; i++){
+			int x = (int)map(creal(trajs[i]), -0.5, 0.5, 0, params.resx);
+			int y = (int)map(cimag(trajs[i]), -0.35 * sqrt(2), 0.65 * sqrt(2), 0, params.resy);	
+			if (x >= 0 && x < params.resx && y >= 0 && y < params.resy){
+				histogram[x][y]++;
+			}
+		}
+
+		if (iter % params.npoint == 1){
+			writeCheckpoint(histogram, params);
+		}
+	}
+
+
 }
