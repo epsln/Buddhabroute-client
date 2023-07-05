@@ -2,6 +2,8 @@
 #include "include/config.h"
 #include "include/bmp.h"
 #include "include/vroot.h"
+#include "include/readFiles.h"
+#include "include/draw.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -17,7 +19,7 @@
 
 void buddhaCPU(params_t params){
 	uint32_t histogram[params.resx][params.resy];
-	complex trajs[params.maxiter];
+	complex* trajs = (complex*) malloc(params.maxiter * sizeof(complex));
 	int iter = 0;
 
 	//TODO:
@@ -31,7 +33,7 @@ void buddhaCPU(params_t params){
 			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
 		}
 
-		drawTrajs(params, trajs);
+		drawTraj(params, trajs);
 
 		for(int i = 0; i < params.maxiter; i++){
 			int x = (int)map(creal(trajs[i]), -0.5, 0.5, 0, params.resx);
@@ -41,8 +43,8 @@ void buddhaCPU(params_t params){
 			}
 		}
 
-		if (iter % params.npoints == 1){
-			writeCheckpoint(histogram, params);
+		if (iter % params.n_points == 1){
+			writeCheckpoint(params, histogram);
 		}
 		iter++;
 	}
