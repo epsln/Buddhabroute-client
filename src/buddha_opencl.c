@@ -1,5 +1,4 @@
 #include "include/math_utils.h"
-#include "include/config.h"
 #include "include/bmp.h"
 #include "include/readFiles.h"
 
@@ -136,21 +135,24 @@ void mandelIterOpenCL(params_t params){
 		}
 
 		int x, y;
+		complex trajs[params.n_kernels][params.maxiter];
 		for(int i = 0; i < params.n_kernels; i++){
 			for(int j = 0; j < params.maxiter; j++){
 				if (trajectoriesA[j + params.maxiter * i] == -10) break;
 				x = (int)map(trajectoriesB[j + params.maxiter * i], -0.5, 0.5, 0, params.resx);	
 				y = (int)map(trajectoriesA[j + params.maxiter * i], -0.35 * sqrt(2), 0.65 * sqrt(2), 0, params.resy);	
+				trajs[i][j] = (complex) {trajectoriesA[j + params.maxiter * i], 
+					       		 trajectoriesB[j + params.maxiter * i]};
 				if (x >= 0 && x < params.resx && y >= 0 && y < params.resy){
 					histogram[x][y]++;
 				}
 			}
 		}
+		drawTrajs(params, trajs);
 		//TODO: Catch interrupts
 		if (iter % 1000 == 1){
 			//TODO:
-			writeCheckpoint(histogram, params);
-			drawTrajs(params, histogram);
+			writeCheckpoint(params, histogram);
 		}
 		iter++;
 	}

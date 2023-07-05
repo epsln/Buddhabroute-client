@@ -1,5 +1,4 @@
 #include "include/math_utils.h"
-#include "include/config.h"
 #include "include/bmp.h"
 #include "include/vroot.h"
 #include "include/readFiles.h"
@@ -11,14 +10,14 @@
 #include <complex.h>
 #include <CL/cl.h>
 
-#include<X11/Xlib.h>
+#include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 
 #define MAX_SOURCE_SIZE (0x100000)
 
 void buddhaCPU(params_t params){
-	uint32_t histogram[params.resx][params.resy];
+	u_int32_t histogram[params.resx][params.resy];
 	complex* trajs = (complex*) malloc(params.maxiter * sizeof(complex));
 	int iter = 0;
 
