@@ -12,26 +12,3 @@ float float_rand( float min, float max ){
 	float scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
 	return min + scale * ( max - min );      /* [min, max] */
 }
-
-int progressBar(int prog, int iMax, int oldStop){
-	//[-------------------------------------------------]
-	//[>------------------------------------------------]
-	//[x>-----------------------------------------------]
-	// #- : 50  
-	// x  : 2%
-	int stopMark = map(prog, 0, iMax, 0, 50);
-	//if (stopMark != oldStop){
-		printf("[");
-		for (int i = 0; i < 50; i++){
-			if (i <= stopMark - 1)
-				printf("x");
-			else if( i == stopMark)
-				printf(">");
-			else
-				printf("-");
-		}
-		printf("] %.2f\% (%d/%d)\r", (float)prog/iMax*100, prog, iMax);
-		fflush(stdout);
-	//}
-	return stopMark;
-}
