@@ -32,7 +32,7 @@ void buddhaCPU(params_t params){
 			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
 		}
 
-		drawTraj(params, trajs);
+		drawTrajs(params, trajs);
 
 		for(int i = 0; i < params.maxiter; i++){
 			int x = (int)map(creal(trajs[i]), -0.5, 0.5, 0, params.resx);
