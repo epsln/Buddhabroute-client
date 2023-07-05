@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "include/config.h"
 #include "include/readFiles.h"
 
@@ -12,7 +16,7 @@ const char* getfield(char* line, int num){
 	return NULL;
 }
 
-void readCheckpoint(int histogram, t_params params){
+void readCheckpoint(params_t params, u_int32_t** histogram){
 	char line[8192];
 	int i = 0;
 	FILE* stream = fopen("checkpoint.txt", "r");
@@ -20,18 +24,18 @@ void readCheckpoint(int histogram, t_params params){
 		fgets(line, 8192, stream);
 		for (int j = 0; j < params.resy; j++){
 			char* tmp = strdup(line);
-			histogram[i][j] =  getfield(tmp, j);
+			histogram[i * params.resy + j] = atoi(getfield(tmp, j));
 			free(tmp);
 		}
 	}
 	fclose(stream);	
 }
 
-void readCheckpoint(uint32_t histogram, t_params params){
+void writeCheckpoint(params_t params, u_int32_t** histogram){
 	FILE* stream = fopen("checkpoint.txt", "w+");
-	for (int i = 0; i < p_params.resx; i++){	
-		for (int j = 0; j < p_params.resy; j++){	
-			sprintf("%u,", histogram[i][j]);
+	for (int i = 0; i < params.resx; i++){	
+		for (int j = 0; j < params.resy; j++){	
+			sprintf("%u,", histogram[i * params.resy + j]);
 		}
 	}
 	fclose(stream);	
