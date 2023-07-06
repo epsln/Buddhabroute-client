@@ -14,8 +14,8 @@ float float_rand(float min, float max){
 }
 
 complex rand_complex(complex min, complex max){
-	float realPart = (creal(max - min)) * ((((float) rand()) / (float) RAND_MAX)) + creal(min) ;
-	float imagPart = (cimag(max - min)) * ((((float) rand()) / (float) RAND_MAX)) + cimag(min) ;
+	float realPart = (creal(max - min)) * ((((float) rand()) / (float) RAND_MAX)) + creal(min);
+	float imagPart = (cimag(max - min)) * ((((float) rand()) / (float) RAND_MAX)) + cimag(min);
 
 	return realPart + I * imagPart;
 }

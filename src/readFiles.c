@@ -16,7 +16,7 @@ const char* getfield(char* line, int num){
 	return NULL;
 }
 
-void readCheckpoint(params_t params, u_int32_t** histogram){
+void readCheckpoint(params_t params, u_int32_t* histogram){
 	char line[8192];
 	int i = 0;
 	FILE* stream = fopen("checkpoint.txt", "r");
@@ -28,15 +28,15 @@ void readCheckpoint(params_t params, u_int32_t** histogram){
 			free(tmp);
 		}
 	}
-	fclose(stream);	
+	fclose(stream);
 }
 
-void writeCheckpoint(params_t params, u_int32_t** histogram){
+void writeCheckpoint(params_t params, u_int32_t* histogram){
 	FILE* stream = fopen("checkpoint.txt", "w+");
-	for (int i = 0; i < params.resx; i++){	
-		for (int j = 0; j < params.resy; j++){	
+	for (int i = 0; i < params.resx; i++){
+		for (int j = 0; j < params.resy; j++){
 			sprintf("%u,", histogram[i * params.resy + j]);
 		}
 	}
-	fclose(stream);	
+	fclose(stream);
 }

@@ -1,5 +1,5 @@
-#ifndef mandel 
-#define mandel 
+#ifndef mandel
+#define mandel
 #include <complex.h>
 
 typedef struct xStuff{
@@ -9,9 +9,9 @@ typedef struct xStuff{
 	XWindowAttributes wa;
 	GC g;
 }xStuff;
-	
 
-void drawTrajs(params_t params, complex* trajs);
-void drawHistogram(params_t params, u_int32_t** histo);
+
+void drawTrajs(params_t* p_params, complex* trajs);
+void drawHistogram(params_t* p_params, u_int32_t** histo);
 
 #endif

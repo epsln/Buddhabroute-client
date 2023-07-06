@@ -20,12 +20,13 @@
 
 int main(){
 	printf(" ?");
-	params_t parameters; 
-	parameters.resx = 4960;
-	parameters.resy = 7106;
-	parameters.n_points = 1000;
-	parameters.maxiter = 1e6;
-	parameters.n_kernels = 32;
+	params_t parameters;
+	params_t* p_parameters = &parameters;
+	p_parameters->resx = 4960;
+	p_parameters->resy = 7106;
+	p_parameters->n_points = 1000;
+	p_parameters->maxiter = 1e2;
+	p_parameters->n_kernels = 32;
 	printf(" ?");
 	/*
 	XColor blackx, blacks;
@@ -45,13 +46,8 @@ int main(){
 	XFillRectangle (x.dpy, x.root, x.g, 0, 0, x.wa.width, x.wa.height);
 	printf("??");
 	*/
-	printf("re %d\n", parameters.resx);
-	printf("re %d\n", parameters.resy);
-	printf("re %d\n", parameters.n_points);
-	printf("re %d\n", parameters.maxiter);
-	printf("re %d\n", parameters.n_kernels);
 
 	srand(time(NULL));
 
-	buddhaCPU(parameters);
+	buddhaCPU(p_parameters);
 }

@@ -8,7 +8,7 @@
 
 #include "include/config.h"
 
-void drawTrajs(params_t params, complex* trajs){
+void drawTrajs(params_t* p_params, complex* trajs){
 	Display *dpy;
 	Window root;
 	XWindowAttributes wa;
@@ -40,7 +40,7 @@ void drawTrajs(params_t params, complex* trajs){
 	XFillRectangle (dpy, root, g, 0, 0, wa.width, wa.height);
 
 	XSetForeground(dpy, g, whites.pixel);
-	for (int i = 0; i < params.maxiter; i++){
+	for (int i = 0; i < p_params->maxiter; i++){
 		if (creal(trajs[i]) == -10) break;
 		float x = map(cimag(trajs[i]), -0.5, 0.5, 0, wa.width);
 		float y = map(creal(trajs[i]), -0.35, 0.65, 0, wa.height);
