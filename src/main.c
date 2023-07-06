@@ -3,6 +3,8 @@
 #include "include/readFiles.h"
 #include "include/config.h"
 #include "include/buddha_cpu.h"
+#include "include/vroot.h"
+#include "include/draw.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,43 +18,38 @@
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 
-#define MAX_SOURCE_SIZE (0x100000)
-
 int main(){
+	printf(" ?");
 	params_t parameters; 
 	parameters.resx = 4960;
-	parameters.resx = 7106;
+	parameters.resy = 7106;
 	parameters.n_points = 1000;
 	parameters.maxiter = 1e6;
 	parameters.n_kernels = 32;
-
-	Display *dpy;
-	Window root;
-	XWindowAttributes wa;
-	GC g;
-
+	printf(" ?");
+	/*
 	XColor blackx, blacks;
-	XColor whitex, whites;
+	xStuff x;
+	x.dpy = XOpenDisplay(getenv("DISPLAY"));
+	x.root = DefaultRootWindow(x.dpy);
+	x.g = XCreateGC(x.dpy, x.root, 0, NULL);
+	printf(" ?");
+	XGetWindowAttributes(x.dpy, x.root, &x.wa);
+	printf(" ?");
 
-	XAllocNamedColor(dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy)), "black", &blacks, &blackx);
-	XAllocNamedColor(dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy)), "white", &whites, &whitex);
+	XAllocNamedColor(x.dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x.dpy)), "black", &blacks, &blackx);
+	printf(" ?");
 
-	/* open the display (connect to the X server) */
-	dpy = XOpenDisplay (getenv ("DISPLAY"));
-
-	/* get the root window */
-	root = DefaultRootWindow (dpy);
-
-	/* create a GC for drawing in the window */
-	g = XCreateGC (dpy, root, 0, NULL);
-
-	XGetWindowAttributes(dpy, root, &wa);
-
-	XAllocNamedColor(dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy)), "black", &blacks, &blackx);
-	XAllocNamedColor(dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy)), "white", &whites, &whitex);
-
-	XSetForeground(dpy, g, blacks.pixel);
-	XFillRectangle (dpy, root, g, 0, 0, wa.width, wa.height);
+	XSetForeground(x.dpy, x.g, blacks.pixel);
+	printf(" ?");
+	XFillRectangle (x.dpy, x.root, x.g, 0, 0, x.wa.width, x.wa.height);
+	printf("??");
+	*/
+	printf("re %d\n", parameters.resx);
+	printf("re %d\n", parameters.resy);
+	printf("re %d\n", parameters.n_points);
+	printf("re %d\n", parameters.maxiter);
+	printf("re %d\n", parameters.n_kernels);
 
 	srand(time(NULL));
 
