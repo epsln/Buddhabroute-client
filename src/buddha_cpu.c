@@ -18,8 +18,7 @@
 
 void buddhaCPU(params_t* p_params, xStuff_t* x){
 	u_int32_t *histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
-	//complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
-	complex trajs[p_params->maxiter];
+	complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
 	int iter = 0;
 
 	//TODO:
