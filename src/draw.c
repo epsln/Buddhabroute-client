@@ -11,15 +11,11 @@
 #include "include/draw.h"
 
 void drawTrajs(params_t* p_params, xStuff_t* x, complex* trajs){
-	XColor whitex, whites;
-	XAllocNamedColor(x->dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x->dpy)), "white", &whites, &whitex);
-	XSetForeground(x->dpy,x->g,whites.pixel);
 
 	for (int i = 0; i < p_params->maxiter; i++){
 		if (creal(trajs[i]) == -10) break;
-		float x0 = map(cimag(trajs[i]), -1, 1, 0, x->wa.width);
-		float y0 = map(creal(trajs[i]), -1, 1, 0, x->wa.height);
-		printf("%f, %f\n", x0, y0);
+		float x0 = map(creal(trajs[i]), -0.5, 0.5, 0, x->wa.height);
+		float y0 = map(cimag(trajs[i]), -0.35 * 16/9., 0.65 * 16/9. , 0, x->wa.width);
 
 		XDrawPoint(x->dpy, x->root, x->g, x0, y0);
 	}
