@@ -19,7 +19,6 @@
 #include <X11/Xos.h>
 
 int main(){
-	printf(" ?");
 	params_t parameters;
 	params_t* p_parameters = &parameters;
 	p_parameters->resx = 4960;
@@ -27,25 +26,15 @@ int main(){
 	p_parameters->n_points = 1000;
 	p_parameters->maxiter = 1e2;
 	p_parameters->n_kernels = 32;
-	printf(" ?");
-	/*
+
 	XColor blackx, blacks;
 	xStuff x;
 	x.dpy = XOpenDisplay(getenv("DISPLAY"));
 	x.root = DefaultRootWindow(x.dpy);
 	x.g = XCreateGC(x.dpy, x.root, 0, NULL);
-	printf(" ?");
 	XGetWindowAttributes(x.dpy, x.root, &x.wa);
-	printf(" ?");
 
 	XAllocNamedColor(x.dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x.dpy)), "black", &blacks, &blackx);
-	printf(" ?");
-
-	XSetForeground(x.dpy, x.g, blacks.pixel);
-	printf(" ?");
-	XFillRectangle (x.dpy, x.root, x.g, 0, 0, x.wa.width, x.wa.height);
-	printf("??");
-	*/
 
 	srand(time(NULL));
 

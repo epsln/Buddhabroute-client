@@ -30,6 +30,9 @@ void buddhaCPU(params_t* p_params){
 		trajs[0] = rand_complex(-2 - 2 * I, 2 + 2 * I);
 		for (int i = 1; i < p_params->maxiter; i++){
 			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
+			printf("%f %f ", creal(trajs[i - 1]), cimag(trajs[i - 1]));
+			printf("%f %f ", creal(trajs[i]), cimag(trajs[i]));
+			printf("%f %f\n", creal(r), cimag(r));
 			if (cabs(trajs[i] - trajs[i - 1]) < 1e-5){trajs[i] = -10; break;};
 			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
 			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
