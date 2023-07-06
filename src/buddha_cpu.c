@@ -16,7 +16,7 @@
 
 #define MAX_SOURCE_SIZE (0x100000)
 
-void buddhaCPU(params_t* p_params){
+void buddhaCPU(params_t* p_params, xStuff_t* x){
 	u_int32_t *histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
 	//complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
 	complex trajs[p_params->maxiter];
@@ -30,15 +30,12 @@ void buddhaCPU(params_t* p_params){
 		trajs[0] = rand_complex(-2 - 2 * I, 2 + 2 * I);
 		for (int i = 1; i < p_params->maxiter; i++){
 			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
-			printf("%f %f ", creal(trajs[i - 1]), cimag(trajs[i - 1]));
-			printf("%f %f ", creal(trajs[i]), cimag(trajs[i]));
-			printf("%f %f\n", creal(r), cimag(r));
 			if (cabs(trajs[i] - trajs[i - 1]) < 1e-5){trajs[i] = -10; break;};
 			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
 			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
 		}
 
-		//drawTrajs(p_params, trajs);
+		drawTrajs(p_params, x, trajs);
 
 		for(int i = 0; i < p_params->maxiter; i++){
 			int x = (int)map(creal(trajs[i]), -0.5, 0.5, 0, p_params->resx);

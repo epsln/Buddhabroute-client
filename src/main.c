@@ -24,11 +24,11 @@ int main(){
 	p_parameters->resx = 4960;
 	p_parameters->resy = 7106;
 	p_parameters->n_points = 1000;
-	p_parameters->maxiter = 1e2;
+	p_parameters->maxiter = 1e6;
 	p_parameters->n_kernels = 32;
 
 	XColor blackx, blacks;
-	xStuff x;
+	xStuff_t x;
 	x.dpy = XOpenDisplay(getenv("DISPLAY"));
 	x.root = DefaultRootWindow(x.dpy);
 	x.g = XCreateGC(x.dpy, x.root, 0, NULL);
@@ -37,6 +37,7 @@ int main(){
 	XAllocNamedColor(x.dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x.dpy)), "black", &blacks, &blackx);
 
 	srand(time(NULL));
+	xStuff_t* p_x = &x;
 
-	buddhaCPU(p_parameters);
+	buddhaCPU(p_parameters, p_x);
 }
