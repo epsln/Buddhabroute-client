@@ -37,6 +37,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 		drawTrajs(p_params, x, trajs);
 
 		for(int i = 0; i < p_params->maxiter; i++){
+			if (trajs[i] == -10) break;
 			int x = (int)map(creal(trajs[i]), -0.5, 0.5, 0, p_params->resx);
 			int y = (int)map(cimag(trajs[i]), -0.35 * sqrt(2), 0.65 * sqrt(2), 0, p_params->resy);
 			if (x >= 0 && x < p_params->resx && y >= 0 && y < p_params->resy){
@@ -45,7 +46,8 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 		}
 
 		if (iter % p_params->n_points == 1){
-			//writeCheckpoint(p_params, histogram);
+			printf("Saving\n");
+			writeCheckpoint(p_params, histogram);
 		}
 		iter++;
 	}

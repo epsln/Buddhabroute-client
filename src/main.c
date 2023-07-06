@@ -23,7 +23,7 @@ int main(){
 	params_t* p_parameters = &parameters;
 	p_parameters->resx = 4960;
 	p_parameters->resy = 7106;
-	p_parameters->n_points = 1000;
+	p_parameters->n_points = 1e6;
 	p_parameters->maxiter = 1e6;
 	p_parameters->n_kernels = 32;
 
