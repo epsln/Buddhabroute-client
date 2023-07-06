@@ -35,6 +35,12 @@ int main(){
 	XGetWindowAttributes(x.dpy, x.root, &x.wa);
 
 	XAllocNamedColor(x.dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x.dpy)), "black", &blacks, &blackx);
+	XFillRectangle(x.dpy, x.root, x.g, 0, 0, x.wa.width, x.wa.height);
+	XFlush(x.dpy);
+
+	XColor whitex, whites;
+	XAllocNamedColor(x.dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x.dpy)), "white", &whites, &whitex);
+	XSetForeground(x.dpy,x.g,whites.pixel);
 
 	srand(time(NULL));
 	xStuff_t* p_x = &x;
