@@ -46,7 +46,6 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 		}
 
 		if (iter % p_params->n_points == 1){
-			printf("Saving\n");
 			writeCheckpoint(p_params, histogram);
 		}
 		iter++;

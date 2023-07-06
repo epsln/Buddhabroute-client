@@ -34,8 +34,9 @@ void writeCheckpoint(params_t* params, u_int32_t* histogram){
 	FILE* stream = fopen("checkpoint.txt", "w+");
 	for (int i = 0; i < params->resx; i++){
 		for (int j = 0; j < params->resy; j++){
-			fprintf(stream, " %u_i",histogram[i * params->resy + j] );
+			fprintf(stream, "%u,",histogram[i * params->resy + j] );
 		}
+		fprintf(stream, "\n");
 	}
 	fclose(stream);
 }
