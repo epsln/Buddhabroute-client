@@ -21,9 +21,6 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
 	int iter = 0;
 
-	//TODO:
-	//readCheckpoint(histogram);
-
 	while(1){
 		complex r = rand_complex(-2 - 2 * I, 2 + 2 * I);
 		trajs[0] = rand_complex(-2 - 2 * I, 2 + 2 * I);
