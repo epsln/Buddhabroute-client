@@ -17,6 +17,14 @@ make
 I recommend using XScreensaver to manage the screensaver part. You can add computeIdle to the list of screensaver by modifying `{HOME}/.xscreensaver`. Add the full path to the executable in the programs section.
 
 
+Finally, export your work once every day at noon by adding this line to your crontab
+
+```
+crontab -e
+
+0 12 * * * * rsync {PATH_TO_EXEC}/checkpoint.csv {SERVER_ADDRESS}:${}
+```
+
 ## Server Side
 The `compute_server` contains a small program that will handle adding each checkpoints to each other and saving the image.
 ### Installation
