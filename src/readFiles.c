@@ -19,6 +19,8 @@ const char* getfield(char* line, int num){
 void readCheckpoint(params_t *params, u_int32_t* histogram){
 	char line[8192];
 	FILE* stream = fopen("checkpoint.txt", "r");
+	if (stream == NULL) return;
+
 	for (int i = 0; i < params->resx; i++){
 		fgets(line, 8192, stream);
 		for (int j = 0; j < params->resy; j++){
