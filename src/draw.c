@@ -22,30 +22,30 @@ void drawTrajs(params_t* p_params, xStuff_t* x, complex* trajs){
 	}
 }
 
-void drawHisto(params_t* p_params, u_int32_t** histogram){
-	Display *dpy;
-	Window root;
-	XWindowAttributes wa;
-	GC g;
+unsigned long _RGB(int r,int g, int b)
+{
+    return b + (g<<8) + (r<<16);
+}
 
-	XColor blackx, blacks;
-	XColor whitex, whites;
+void drawHisto(params_t* p_params, xStuff_t* x, u_int32_t* histogram){
+	float maxVal = 0;
+	for (int i = 0; i < p_params -> resx; i++){
+		for (int j = 0; j < p_params -> resy; j++){
+			maxVal = fmax(histogram[i * p_params -> resy + j], maxVal);
+		}
+	}
+	maxVal = logf(maxVal + 1);
+	for (int i = 0; i < p_params -> resx; i++){
+		for (int j = 0; j < p_params -> resy; j++){
+			float x0 = map(i, 0, p_params->resx, 0, x->wa.height);
+			float y0 = map(j, 0, p_params->resy, 0, x->wa.width);
 
-	/* open the display (connect to the X server) */
-	dpy = XOpenDisplay (getenv ("DISPLAY"));
+			float c = logf(histogram[i * p_params -> resy + j] + 1)/maxVal * 255;
 
+			XSetForeground(x -> dpy, x -> g, _RGB(c, c, c));
 
-	/* get the root window */
-	root = DefaultRootWindow (dpy);
+			XDrawPoint(x->dpy, x->root, x->g, x0, y0);
 
-
-	/* create a GC for drawing in the window */
-	g = XCreateGC (dpy, root, 0, NULL);
-
-	XGetWindowAttributes(dpy, root, &wa);
-
-	XAllocNamedColor(dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy)), "black", &blacks, &blackx);
-	XAllocNamedColor(dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy)), "white", &whites, &whitex);
-
-	//TODO
+		}
+	}
 }
