@@ -11,7 +11,6 @@
 #include <time.h>
 #include <string.h>
 #include <math.h>
-#include <config.h>
 #include <CL/cl.h>
 
 #include <X11/Xlib.h>
@@ -19,6 +18,8 @@
 #include <X11/Xos.h>
 
 int main(){
+	srand(time(NULL));
+
 	params_t parameters;
 	params_t* p_parameters = &parameters;
 	p_parameters->resx = 4960;
@@ -26,6 +27,12 @@ int main(){
 	p_parameters->n_points = 1e6;
 	p_parameters->maxiter = 1e6;
 	p_parameters->n_kernels = 32;
+	p_parameters->checkpoint_filename;
+
+	int randNum = rand();
+	char str[(int)((ceil(log10(randNum))+1)*sizeof(char))];
+	sprintf(str, "checkpoints/%d.csv", randNum);
+	strcpy(p_parameters -> checkpoint_filename, str);
 
 	XColor blackx, blacks;
 	xStuff_t x;
