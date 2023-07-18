@@ -22,11 +22,11 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	int iter = 0;
 
 	while(1){
-		complex r = rand_complex(-2 - 2 * I, 2 + 2 * I);
-		trajs[0] = rand_complex(-2 - 2 * I, 2 + 2 * I);
+		complex r = rand_complex(-4 - 4 * I, 4 + 4 * I);
+		trajs[0] = rand_complex(-4 - 4 * I, 4 + 4 * I);
 		for (int i = 1; i < p_params->maxiter; i++){
 			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
-			if (cabs(trajs[i] - trajs[i - 1]) < 1e-5){trajs[i] = -10; break;};
+			//if (cabs(trajs[i] - trajs[i - 1]) < 1e-5){trajs[i] = -10; break;};
 			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
 			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
 		}
