@@ -7,7 +7,6 @@ typedef struct params_t{
 	int n_points;
 	int maxiter;
 	int n_kernels;
-	char kernel_filename[256];
 	char checkpoint_filename[256];
 }params_t;
 
