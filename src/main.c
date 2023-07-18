@@ -11,7 +11,6 @@
 #include <time.h>
 #include <string.h>
 #include <math.h>
-#include <CL/cl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -37,10 +36,10 @@ int main(){
 	struct stat st = {0};
 
 	if (stat("/tmp/checkpoints_idler", &st) == -1) {
-		mkdir("/tmp/checpoints_idler/", 0700);
+		mkdir("/tmp/checkpoints_idler/", 0700);
 	}
 
-	sprintf(str, "/tmp/checkpoints/%d.csv", randNum);
+	sprintf(str, "/tmp/checkpoints_idler/%d.csv", randNum);
 	strcpy(p_parameters -> checkpoint_filename, str);
 
 	FILE *fp;
