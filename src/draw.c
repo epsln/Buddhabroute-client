@@ -27,7 +27,7 @@ unsigned long _RGB(int r,int g, int b)
     return b + (g<<8) + (r<<16);
 }
 
-void drawHisto(params_t* p_params, xStuff_t* x, u_int32_t* histogram){
+void drawHistogram(params_t* p_params, xStuff_t* x, u_int32_t* histogram){
 	float maxVal = 0;
 	for (int i = 0; i < p_params -> resx; i++){
 		for (int j = 0; j < p_params -> resy; j++){
@@ -37,10 +37,10 @@ void drawHisto(params_t* p_params, xStuff_t* x, u_int32_t* histogram){
 	maxVal = logf(maxVal + 1);
 	for (int i = 0; i < p_params -> resx; i++){
 		for (int j = 0; j < p_params -> resy; j++){
-			float x0 = map(i, 0, p_params->resx, 0, x->wa.height);
-			float y0 = map(j, 0, p_params->resy, 0, x->wa.width);
+			float x0 = map(i, 0, p_params->resx, 0, x->wa.width);
+			float y0 = map(j, 0, p_params->resy, 0, x->wa.height);
 
-			float c = logf(histogram[i * p_params -> resy + j] + 1)/maxVal * 255;
+			float c = logf(histogram[j * p_params -> resx + i] + 1)/maxVal * 255;
 
 			XSetForeground(x -> dpy, x -> g, _RGB(c, c, c));
 
