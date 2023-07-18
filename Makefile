@@ -1,6 +1,6 @@
 EXEC := ./computeIdle
 
-CFLAGS := -g -Og -Ofast -Wall -lX11 -lm -l OpenCL -I src/include
+CFLAGS := -g -Og -Ofast -Wall -lX11 -lm -I src/include
 
 OBJS := $(patsubst src/%.c,src/%.o,$(wildcard src/*.c))
 
