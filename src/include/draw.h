@@ -16,6 +16,7 @@ typedef struct xStuff_t{
 
 
 void drawTrajs(params_t* p_params, xStuff_t* x, complex* trajs);
-void drawHistogram(params_t* p_params, xStuff_t* x, u_int32_t** histo);
+
+void drawHistogram(params_t* p_params, xStuff_t* x, u_int32_t* histo);
 
 #endif
