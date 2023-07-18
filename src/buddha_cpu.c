@@ -31,7 +31,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
 		}
 
-		drawTrajs(p_params, x, trajs);
+
 
 		for(int i = 0; i < p_params->maxiter; i++){
 			if (trajs[i] == -10) break;
@@ -41,9 +41,9 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 				histogram[x + y * p_params->resx]++;
 			}
 		}
-
 		if (iter % p_params->n_points == 1){
 			writeCheckpoint(p_params, histogram);
+			drawHistogram(p_params, x, histogram);
 		}
 		iter++;
 	}
