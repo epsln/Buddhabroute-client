@@ -24,7 +24,7 @@ int main(){
 	params_t* p_parameters = &parameters;
 	p_parameters->resx = 4960;
 	p_parameters->resy = 7106;
-	p_parameters->n_points = 1e6;
+	p_parameters->n_points = 1e4;
 	p_parameters->maxiter = 1e6;
 	p_parameters->n_kernels = 32;
 	p_parameters->checkpoint_filename;
@@ -33,6 +33,9 @@ int main(){
 	char str[(int)((ceil(log10(randNum))+1)*sizeof(char))];
 	sprintf(str, "checkpoints/%d.csv", randNum);
 	strcpy(p_parameters -> checkpoint_filename, str);
+
+	FILE *fp;
+	fp = fopen (p_parameters -> checkpoint_filename, "w+");
 
 	XColor blackx, blacks;
 	xStuff_t x;
@@ -49,7 +52,6 @@ int main(){
 	XAllocNamedColor(x.dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x.dpy)), "white", &whites, &whitex);
 	XSetForeground(x.dpy,x.g,whites.pixel);
 
-	srand(time(NULL));
 	xStuff_t* p_x = &x;
 
 	buddhaCPU(p_parameters, p_x);
