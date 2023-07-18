@@ -12,6 +12,9 @@
 #include <string.h>
 #include <math.h>
 #include <CL/cl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -24,14 +27,20 @@ int main(){
 	params_t* p_parameters = &parameters;
 	p_parameters->resx = 4960;
 	p_parameters->resy = 7106;
-	p_parameters->n_points = 1e4;
+	p_parameters->n_points = 1e6;
 	p_parameters->maxiter = 1e6;
 	p_parameters->n_kernels = 32;
 	p_parameters->checkpoint_filename;
 
 	int randNum = rand();
 	char str[(int)((ceil(log10(randNum))+1)*sizeof(char))];
-	sprintf(str, "checkpoints/%d.csv", randNum);
+	struct stat st = {0};
+
+	if (stat("/tmp/checkpoints_idler", &st) == -1) {
+		mkdir("/tmp/checpoints_idler/", 0700);
+	}
+
+	sprintf(str, "/tmp/checkpoints/%d.csv", randNum);
 	strcpy(p_parameters -> checkpoint_filename, str);
 
 	FILE *fp;
