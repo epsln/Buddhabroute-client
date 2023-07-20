@@ -1,4 +1,4 @@
-EXEC := ./computeIdle
+EXEC := ./buddhabroute
 
 CFLAGS := -g -Og -Ofast -Wall -lX11 -lm -I src/include
 

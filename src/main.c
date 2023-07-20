@@ -34,11 +34,11 @@ int main(){
 	char str[(int)((ceil(log10(randNum))+1)*sizeof(char))];
 	struct stat st = {0};
 
-	if (stat("/tmp/checkpoints_idler", &st) == -1) {
-		mkdir("/tmp/checkpoints_idler/", 0700);
+	if (stat("/tmp/buddhabroute_checkpoints", &st) == -1) {
+		mkdir("/tmp/buddhabroute_checkpoints/", 0700);
 	}
 
-	sprintf(str, "/tmp/checkpoints_idler/%d.csv", randNum);
+	sprintf(str, "/tmp/buddhabroute_checkpoints/%d.csv", randNum);
 	strcpy(p_parameters -> checkpoint_filename, str);
 
 	FILE *fp;
