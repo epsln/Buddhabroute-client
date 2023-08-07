@@ -20,7 +20,6 @@ void writeCheckpoint(params_t* params, u_int32_t* histogram){
 
 	sprintf(buffer_filename, "%s/%s", params->output_dir, "checkpoint_buffer.csv");
 	FILE* stream = fopen(buffer_filename, "w");
-	printf("writing to %s", buffer_filename);
 	for (int i = 0; i < params->resx; i++){
 		for (int j = 0; j < params->resy; j++){
 			fprintf(stream, "%u",histogram[j * params->resx + i] );
