@@ -20,6 +20,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	u_int32_t *histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
 	complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
 	int iter = 0;
+        float invSqr2 = 1/sqrt(2);
 
 	while(1){
 		complex r = rand_complex(-4 - 4 * I, 4 + 4 * I);
@@ -32,11 +33,10 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 		}
 
 
-
 		for(int i = 0; i < p_params->maxiter; i++){
 			if (trajs[i] == -10) break;
-			int x = (int)map(cimag(trajs[i]), -0.35 * sqrt(2), 0.65 * sqrt(2), 0, p_params->resx);
-			int y = (int)map(creal(trajs[i]), -0.5, 0.5, 0, p_params->resy);
+			int x = (int)map(creal(trajs[i]), -0.5, 0.5, 0, p_params->resx);
+			int y = (int)map(cimag(trajs[i]), -0.5 * invSqr2, 0.5 * invSqr2, 0, p_params->resy);
 			if (x >= 0 && x < p_params->resx && y >= 0 && y < p_params->resy){
 				histogram[x + y * p_params->resx]++;
 			}
