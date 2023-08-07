@@ -29,16 +29,17 @@ int main(){
 	p_parameters->n_points = 1e6;
 	p_parameters->maxiter = 1e3;
 	p_parameters->n_kernels = 32;
+	strcpy(p_parameters->output_dir, "/tmp/buddhabroute-checkpoints/");
 
 	int randNum = rand();
 	char str[(int)((ceil(log10(randNum))+1)*sizeof(char))];
 	struct stat st = {0};
 
-	if (stat("/tmp/buddhabroute-checkpoints", &st) == -1) {
-		mkdir("/tmp/buddhabroute-checkpoints/", 0700);
+	if (stat(p_parameters->output_dir, &st) == -1) {
+		mkdir(p_parameters->output_dir, 0700);
 	}
 
-	sprintf(str, "/tmp/buddhabroute-checkpoints/%d.csv", randNum);
+	sprintf(str, "%s/%d.csv", p_parameters->output_dir, randNum);
 	strcpy(p_parameters -> checkpoint_filename, str);
 
 	FILE *fp;
