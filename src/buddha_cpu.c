@@ -20,7 +20,11 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	u_int32_t *histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
 	complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
 	int iter = 0;
-        float invSqr2 = 1/sqrt(2);
+	float invSqr2 = 1/sqrt(2);
+
+	int animation_state = 0;
+	XColor blackx, blacks;
+	XAllocNamedColor(x->dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x->dpy)), "black", &blacks, &blackx);
 
 	while(1){
 		complex r = rand_complex(-4 - 4 * I, 4 + 4 * I);
@@ -41,10 +45,28 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 				histogram[x + y * p_params->resx]++;
 			}
 		}
-		if (iter % p_params->n_points == 1){
-			writeCheckpoint(p_params, histogram);
-			drawHistogram(p_params, x, histogram);
+		float f = 0;
+		switch (animation_state) {
+			case 0:
+				drawTrajs(p_params, x, trajs);
+
+				if (iter % p_params -> n_points == p_params->n_points - 1) animation_state = 1;
+				break;
+			case 1:
+				drawHistogram(p_params, x, histogram);
+				animation_state = 2;
+				break;
+			case 2:
+				if (iter % p_params-> n_points == 0) {
+					animation_state = 0;
+					XFillRectangle(x->dpy, x->root, x->g, 0, 0, x->wa.width, x->wa.height);
+					XFlush(x->dpy);
+				}
+				break;
 		}
+		if (iter % p_params->n_points == 1)
+			writeCheckpoint(p_params, histogram);
+
 		iter++;
 	}
 }
