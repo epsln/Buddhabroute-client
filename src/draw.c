@@ -11,8 +11,14 @@
 #include "include/math_utils.h"
 #include "include/draw.h"
 
+unsigned long _RGB(int r,int g, int b)
+{
+    return b + (g<<8) + (r<<16);
+}
+
 void drawTrajs(params_t* p_params, xStuff_t* x, complex* trajs){
 
+	XSetForeground(x -> dpy, x -> g, _RGB(255, 255, 255));
 	for (int i = 0; i < p_params->maxiter; i++){
 		if (creal(trajs[i]) == -10) break;
 		float x0 = map(creal(trajs[i]), -0.5, 0.5, 0, x->wa.height);
@@ -20,11 +26,6 @@ void drawTrajs(params_t* p_params, xStuff_t* x, complex* trajs){
 
 		XDrawPoint(x->dpy, x->root, x->g, x0, y0);
 	}
-}
-
-unsigned long _RGB(int r,int g, int b)
-{
-    return b + (g<<8) + (r<<16);
 }
 
 void drawHistogram(params_t* p_params, xStuff_t* x, u_int32_t* histogram){
