@@ -24,8 +24,12 @@ I recommend using XScreensaver to manage the screensaver part. You can add compu
 
 Finally, export your work once every day at noon by adding this line to your crontab
 
+First open your cronjobs
 ```
 crontab -e
+```
 
-0 12 * * * * rsync /tmp/buddhabroute_checkpoints/* {SERVER_ADDRESS} && rm /tmp/buddhabroute_checkpoints/*
+Then add this line:
+```
+0 12 * * * * curl -F @/tmp/buddhabroute_checkpoints/* -F ${UUID}{SERVER_ADDRESS} && rm /tmp/buddhabroute_checkpoints/*
 ```
