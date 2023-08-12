@@ -3,9 +3,14 @@ A simple screensaver that also computes the buddhabrot for the Lambda Function, 
 
 
 ## Compiling
-You will need X11 Libs
+You will need X11 Libs and opencl-headers
+debian :
 ```
-sudo apt install libx11-dev
+sudo apt install libx11-dev opencl-headers
+```
+archlinux :
+```
+pacman -S opencl-headers libx11
 ```
 
 Then you can compile.
