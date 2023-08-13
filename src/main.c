@@ -29,7 +29,7 @@ int main(){
 	p_parameters->n_points = 1e6;
 	p_parameters->maxiter = 1e6;
 	p_parameters->n_kernels = 32;
-	strcpy(p_parameters->output_dir, "/tmp/buddhabroute-checkpoints/");
+	strcpy(p_parameters->output_dir, strcat(getenv("HOME"), ".cache/buddhabroute-checkpoints"));
 
 	int randNum = rand();
 	char str[(int)((ceil(log10(randNum))+1)*sizeof(char))];
