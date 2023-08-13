@@ -8,7 +8,6 @@
 #include <math.h>
 #include <string.h>
 #include <complex.h>
-#include <CL/cl.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
