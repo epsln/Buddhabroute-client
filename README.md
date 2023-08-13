@@ -6,11 +6,11 @@ A simple screensaver that also computes the buddhabrot for the Lambda Function, 
 You will need X11 Libs and opencl-headers
 debian :
 ```
-sudo apt install libx11-dev opencl-headers
+sudo apt install libx11-dev
 ```
 archlinux :
 ```
-pacman -S opencl-headers libx11
+pacman -S libx11
 ```
 
 Then you can compile.
