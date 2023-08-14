@@ -28,5 +28,4 @@ void writeCheckpoint(params_t* params, u_int32_t* histogram){
 		fprintf(stream, "\n");
 	}
 	fclose(stream);
-	rename(buffer_filename, params->checkpoint_filename);
 }
