@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <signal.h>
 #include <complex.h>
 
 #include <X11/Xlib.h>
@@ -14,6 +15,21 @@
 #include <X11/Xos.h>
 
 #define MAX_SOURCE_SIZE (0x100000)
+
+char checkpoint_filename[256];
+char output_dir[256];
+
+void sig_handler(int signo){
+	char buffer_filename[256];
+
+	sprintf(buffer_filename, "%s/%s", output_dir, "checkpoint_buffer.csv");
+	printf("%s %s\n", buffer_filename, checkpoint_filename);
+	if (signo == SIGINT)
+		rename(buffer_filename, checkpoint_filename);
+	if (signo == SIGKILL)
+		rename(buffer_filename, checkpoint_filename);
+	exit(1);
+}
 
 void buddhaCPU(params_t* p_params, xStuff_t* x){
 	u_int32_t *histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
@@ -24,6 +40,9 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	int animation_state = 0;
 	XColor blackx, blacks;
 	XAllocNamedColor(x->dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x->dpy)), "black", &blacks, &blackx);
+
+	strcpy(checkpoint_filename, p_params -> checkpoint_filename);
+	strcpy(output_dir, p_params -> output_dir);
 
 	while(1){
 		complex r = rand_complex(-4 - 4 * I, 4 + 4 * I);
@@ -63,9 +82,9 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 				}
 				break;
 		}
-		if (iter % p_params->n_points == 1)
+		if (iter % p_params -> n_points == 0)
 			writeCheckpoint(p_params, histogram);
-
+		signal(SIGINT, sig_handler);
 		iter++;
 	}
 }
