@@ -18,21 +18,24 @@
 
 char checkpoint_filename[256];
 char output_dir[256];
+u_int32_t *histogram;
+params_t* p;
+
 
 void sig_handler(int signo){
 	char buffer_filename[256];
 
 	sprintf(buffer_filename, "%s/%s", output_dir, "checkpoint_buffer.csv");
-	printf("%s %s\n", buffer_filename, checkpoint_filename);
-	if (signo == SIGINT)
-		rename(buffer_filename, checkpoint_filename);
-	if (signo == SIGKILL)
-		rename(buffer_filename, checkpoint_filename);
+
+	printf("%d %s %s\n", signo, buffer_filename, checkpoint_filename);
+	writeCheckpoint(p, histogram);
+	rename(buffer_filename, checkpoint_filename);
 	exit(1);
 }
 
 void buddhaCPU(params_t* p_params, xStuff_t* x){
-	u_int32_t *histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
+	histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
+	p = p_params;
 	complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
 	int iter = 0;
 	float invSqr2 = 1/sqrt(2);
@@ -84,7 +87,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 		}
 		if (iter % p_params -> n_points == 0)
 			writeCheckpoint(p_params, histogram);
-		signal(SIGINT, sig_handler);
+		signal(SIGTERM, sig_handler);
 		iter++;
 	}
 }
