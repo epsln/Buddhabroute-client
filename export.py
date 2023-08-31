@@ -36,22 +36,21 @@ for input_file in filename_list:
     try:
         histo_df = pd.read_csv(input_file)
     except ParserError:
-        #remove(input_file)
+        remove(input_file)
         continue
     except UnicodeDecodeError:
-        #remove(input_file)
+        remove(input_file)
         continue
     except EmptyDataError:
-        #remove(input_file)
+        remove(input_file)
         continue
 
     if histo_df.shape != (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])):
-        #remove(input_file)
+        remove(input_file)
         continue
 
     histogram = np.add(histogram, histo_df.values)
-    continue
-    #remove(input_file)
+    remove(input_file)
 
 url = f"{config['EXPORT']['url']}:{config['EXPORT']['port']}{config['EXPORT']['route']}"
 
