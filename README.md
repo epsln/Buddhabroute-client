@@ -18,6 +18,29 @@ Then you can compile.
 make
 ```
 
+The export program is a simple python script that will merge all your checkpoints and send to the server.
+
+Create a virtual environment and install the requirements
+
+```
+python -m venv buddhabroute
+source buddhabroute/bin/activate
+pip install -r requirements.txt
+```
+
+You should modify the `config.ini` with the URL and port of running server.
+
+Finally, add a cronjob to automatically export your work
+
+```
+crontab -l > mycron
+echo "0 12 * * $(pwd)/buddhabroute/bin/activate /usr/bin/python $(pwd)/export.py" >> mycron
+#install new cron file
+crontab mycron
+rm mycron
+```
+All done !
+
 ## Running
 ```
 ./buddhabroute
@@ -25,16 +48,3 @@ make
 Every 100K iterations, the program will save to a checkpoint file the histogram it is computing. The filename is randomised every time the program is launched.
 
 I recommend using XScreensaver to manage the screensaver part. You can add computeIdle to the list of screensaver by modifying `{HOME}/.xscreensaver`. Add the full path to the executable in the programs section.
-
-
-Finally, export your work once every day at noon by adding this line to your crontab
-
-First open your cronjobs
-```
-crontab -e
-```
-
-Then add this line:
-```
-0 12 * * * * curl -F @/tmp/buddhabroute_checkpoints/* -F ${UUID}{SERVER_ADDRESS} && rm /tmp/buddhabroute_checkpoints/*
-```
