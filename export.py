@@ -9,6 +9,7 @@ from pathlib import Path
 import time
 import uuid
 import requests
+import pdb
 import base64
 import hashlib
 import json
@@ -22,16 +23,16 @@ def configure_logger(debug, dryrun=False, log_prefix=None):
     log_dir = Path.home() / f"{Path(__file__).stem}_LOG"
     log_dir.mkdir(exist_ok=True)
     log_file = log_dir / f"{time.strftime('%Y%m%d')}.log"
-    log_format = ( 
+    log_format = (
         f"%(asctime)s{' - DRYRUN' if dryrun else ''} - %(levelname)s - {log_prefix if log_prefix else ''}%(message)s"
-    )   
+    )
     logging.basicConfig(
         format=log_format,
         datefmt="%Y-%m-%d %H:%M:%S",
         level=logging.INFO,
         handlers=[logging.StreamHandler(), logging.FileHandler(log_file)],
         force=True,
-    )   
+    )
     if debug:
         logger.setLevel(logging.DEBUG)
     logging.getLogger("sh").setLevel(logging.WARNING)
@@ -99,6 +100,5 @@ if __name__ == '__main__':
         )
     ).decode('utf-8')
 
-    import pdb
     pdb.set_trace()
     r = requests.post(url, json=data, headers=headers)
