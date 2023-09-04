@@ -9,7 +9,6 @@ from pathlib import Path
 import time
 import uuid
 import requests
-import pdb
 import base64
 import hashlib
 import json
@@ -100,5 +99,4 @@ if __name__ == '__main__':
         )
     ).decode('utf-8')
 
-    pdb.set_trace()
     r = requests.post(url, json=data, headers=headers)
