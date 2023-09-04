@@ -68,24 +68,24 @@ if __name__ == '__main__':
             logger.debug(f'reading {input_file}')
         except ParserError:
             logger.info(f'{input_file} failed to parse, removing')
-            #remove(input_file)
+            remove(input_file)
             continue
         except UnicodeDecodeError:
             logger.info(f'{input_file} failed to decode, removing')
-            #remove(input_file)
+            remove(input_file)
             continue
         except EmptyDataError:
             logger.info(f'{input_file} is empty, removing')
-            #remove(input_file)
+            remove(input_file)
             continue
 
         if histo_df.shape != (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])):
             logger.info(f'{input_file} is not the correct dimension, removing')
-            #remove(input_file)
+            remove(input_file)
             continue
 
         histogram = np.add(histogram, histo_df.values)
-        #remove(input_file)
+        remove(input_file)
 
     url = f"{config['EXPORT']['url']}:{config['EXPORT']['port']}{config['EXPORT']['route']}"
     logger.debug(f'{url}')
@@ -101,4 +101,4 @@ if __name__ == '__main__':
 
     import pdb
     pdb.set_trace()
-    #r = requests.post(url, json=data, headers=headers)
+    r = requests.post(url, json=data, headers=headers)
