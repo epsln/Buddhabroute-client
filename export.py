@@ -1,6 +1,4 @@
 import numpy as np
-import pandas as pd
-from pandas.errors import ParserError, EmptyDataError
 
 import configparser
 from os import listdir, mkdir, getcwd, remove
