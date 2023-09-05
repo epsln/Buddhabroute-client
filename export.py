@@ -62,28 +62,20 @@ if __name__ == '__main__':
 
     for input_file in filename_list:
         try:
-            histo_df = pd.read_csv(input_file)
+            histo = np.loadtxt(input_file, delimiter = ',', dtype = int)
             logger.debug(f'reading {input_file}')
-        except ParserError:
-            logger.info(f'{input_file} failed to parse, removing')
-            remove(input_file)
-            continue
-        except UnicodeDecodeError:
-            logger.info(f'{input_file} failed to decode, removing')
-            remove(input_file)
-            continue
-        except EmptyDataError:
-            logger.info(f'{input_file} is empty, removing')
+        except:
+            logger.info(f'Error with {input_file}, removing')
             remove(input_file)
             continue
 
-        if histo_df.shape != (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])):
+        if histo.shape != (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])):
             logger.info(f'{input_file} is not the correct dimension, removing')
             remove(input_file)
             continue
 
-        histogram = np.add(histogram, histo_df.values)
-        remove(input_file)
+        histogram = np.add(histogram, histo)
+        #remove(input_file)
 
     url = f"{config['EXPORT']['url']}:{config['EXPORT']['port']}{config['EXPORT']['route']}"
     logger.debug(f'{url}')
