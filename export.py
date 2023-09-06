@@ -75,7 +75,7 @@ if __name__ == '__main__':
             continue
 
         histogram = np.add(histogram, histo)
-        #remove(input_file)
+        remove(input_file)
 
     url = f"{config['EXPORT']['url']}:{config['EXPORT']['port']}{config['EXPORT']['route']}"
     logger.debug(f'{url}')
