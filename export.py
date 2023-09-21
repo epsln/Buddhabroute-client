@@ -6,6 +6,7 @@ import configparser
 from os import listdir, mkdir, getcwd, remove
 from os.path import isfile, join, expanduser
 from pathlib import Path
+import subprocess
 import time
 import uuid
 import requests
@@ -53,40 +54,47 @@ if __name__ == '__main__':
     data['nickname'] = config['EXPORT']['nickname']
     logger.debug(f'{data}')
 
-
-    full_input_path = expanduser(config['EXPORT']['input_dir'])
-    filename_list = [join(full_input_path, f) for f in listdir(full_input_path)
-                    if isfile(join(full_input_path, f)) and f.endswith(".csv")
-                    and f != "checkpoint_buffer.csv"]
-    logger.debug(f'{filename_list}')
-
+    proc = subprocess.Popen(['python','fake_utility.py'],stdout=subprocess.PIPE)
     histogram = np.zeros((int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
+    while True:
+        output = process.stdout.readline()
+        histogram = np.array([float(x) for x in output.split(' ')])
+        print(histogram, end='', flush=True)
 
-    for input_file in filename_list:
-        try:
-            histo_df = pd.read_csv(input_file)
-            logger.debug(f'reading {input_file}')
-        except ParserError:
-            logger.info(f'{input_file} failed to parse, removing')
-            remove(input_file)
-            continue
-        except UnicodeDecodeError:
-            logger.info(f'{input_file} failed to decode, removing')
-            remove(input_file)
-            continue
-        except EmptyDataError:
-            logger.info(f'{input_file} is empty, removing')
-            remove(input_file)
-            continue
-
-        if histo_df.shape != (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])):
-            logger.info(f'{input_file} is not the correct dimension, removing')
-            remove(input_file)
-            continue
-
-        histogram = np.add(histogram, histo_df.values)
-        remove(input_file)
-
+    
+#    full_input_path = expanduser(config['EXPORT']['input_dir'])
+#    filename_list = [join(full_input_path, f) for f in listdir(full_input_path)
+#                    if isfile(join(full_input_path, f)) and f.endswith(".csv")
+#                    and f != "checkpoint_buffer.csv"]
+#    logger.debug(f'{filename_list}')
+#
+#    histogram = np.zeros((int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
+#
+#    for input_file in filename_list:
+#        try:
+#            histo_df = pd.read_csv(input_file)
+#            logger.debug(f'reading {input_file}')
+#        except ParserError:
+#            logger.info(f'{input_file} failed to parse, removing')
+#            remove(input_file)
+#            continue
+#        except UnicodeDecodeError:
+#            logger.info(f'{input_file} failed to decode, removing')
+#            remove(input_file)
+#            continue
+#        except EmptyDataError:
+#            logger.info(f'{input_file} is empty, removing')
+#            remove(input_file)
+#            continue
+#
+#        if histo_df.shape != (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])):
+#            logger.info(f'{input_file} is not the correct dimension, removing')
+#            remove(input_file)
+#            continue
+#
+#        histogram = np.add(histogram, histo_df.values)
+#        remove(input_file)
+#
     url = f"{config['EXPORT']['url']}:{config['EXPORT']['port']}{config['EXPORT']['route']}"
     logger.debug(f'{url}')
 
