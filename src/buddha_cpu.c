@@ -15,13 +15,11 @@
 
 #define MAX_SOURCE_SIZE (0x100000)
 
-char checkpoint_filename[256];
-char output_dir[256];
-u_int32_t *histogram;
-params_t* p;
 
 
 void buddhaCPU(params_t* p_params, xStuff_t* x){
+	u_int32_t *histogram;
+	params_t* p;
 	histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
 	p = p_params;
 	complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
