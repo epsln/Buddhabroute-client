@@ -6,9 +6,7 @@ typedef struct params_t{
 	int resy;
 	int n_points;
 	int maxiter;
-	int n_kernels;
-	char checkpoint_filename[256];
-	char output_dir[256];
+	int plot;
 }params_t;
 
 #endif

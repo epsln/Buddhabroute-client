@@ -32,9 +32,6 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	XColor blackx, blacks;
 	XAllocNamedColor(x->dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x->dpy)), "black", &blacks, &blackx);
 
-	strcpy(checkpoint_filename, p_params -> checkpoint_filename);
-	strcpy(output_dir, p_params -> output_dir);
-
 	while(1){
 		complex r = rand_complex(-4 - 4 * I, 4 + 4 * I);
 		trajs[0] = rand_complex(-4 - 4 * I, 4 + 4 * I);
@@ -54,7 +51,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 				histogram[x + y * p_params->resx]++;
 			}
 		}
-		float f = 0;
+		if (p_params->plot == 0) continue;
 		switch (animation_state) {
 			case 0:
 				drawTrajs(p_params, x, trajs);

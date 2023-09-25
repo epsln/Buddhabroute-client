@@ -19,7 +19,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 
-int main(){
+int main(int argc, char *argv[]){
 	srand(time(NULL));
 
 	params_t parameters;
@@ -28,17 +28,10 @@ int main(){
 	p_parameters->resy = 4960;
 	p_parameters->n_points = 1e6;
 	p_parameters->maxiter = 1e6;
-
-	int randNum = rand();
-	char str[(int)((ceil(log10(randNum))+1)*sizeof(char))];
-	struct stat st = {0};
-
-	if (stat(p_parameters->output_dir, &st) == -1) {
-		mkdir(p_parameters->output_dir, 0700);
-	}
-
-	sprintf(str, "%s/%d.csv", p_parameters->output_dir, randNum);
-	strcpy(p_parameters -> checkpoint_filename, str);
+	if (argc <= 2 && strcmp(argv[1], "--no-output") == 0)
+		p_parameters->plot= 0;
+	else
+		p_parameters->plot= 1;
 
 	XColor blackx, blacks;
 	xStuff_t x;
