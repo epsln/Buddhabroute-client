@@ -51,6 +51,7 @@ if __name__ == '__main__':
     data['uuid'] = m.hexdigest()
     data['maxiter'] = config['IMAGE']['maxiter']
     data['shape'] = (config['IMAGE']['resx'], config['IMAGE']['resy'])
+    data['function_name'] = config['IMAGE']['function_name']
     data['nickname'] = config['EXPORT']['nickname']
     data['version'] = config['EXPORT']['version']
     url = f"{config['EXPORT']['url']}:{config['EXPORT']['port']}{config['EXPORT']['route']}"
