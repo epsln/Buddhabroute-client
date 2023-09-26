@@ -13,6 +13,7 @@ import requests
 import base64
 import hashlib
 import json
+import sys
 import logging
 import zlib
 
@@ -61,8 +62,9 @@ if __name__ == '__main__':
     histogram = np.zeros((int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
     process_list = []
 
-    for n in range(int(config['IMAGE']['workers'])):
-        process_list.append(subprocess.Popen(['./buddhabroute-dev'],stdout=subprocess.PIPE))
+    process_list.append(subprocess.Popen(['./buddhabroute-dev'],stdout=subprocess.PIPE))
+    for n in range(max(int(config['IMAGE']['workers'])-1, 0)):
+        process_list.append(subprocess.Popen(['./buddhabroute-dev', '--no-output'] ,stdout=subprocess.PIPE))
 
     while True:
         for n, process in enumerate(process_list): 
@@ -76,11 +78,11 @@ if __name__ == '__main__':
             logger.debug(f'proc {n}: {histogram.shape}')
 
 
-            # with compression to save bandwidth
-            data['histogram'] = base64.b64encode(
-                zlib.compress(
-                    histogram.tobytes()
-                )
-            ).decode('utf-8')
-
-            r = requests.post(url, json=data, headers=headers)
+#            # with compression to save bandwidth
+#            data['histogram'] = base64.b64encode(
+#                zlib.compress(
+#                    histogram.tobytes()
+#                )
+#            ).decode('utf-8')
+#
+#            r = requests.post(url, json=data, headers=headers)
