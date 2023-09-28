@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
 	p_parameters->resy = 4960;
 	p_parameters->n_points = 1e6;
 	p_parameters->maxiter = 1e6;
-	if (argc <= 2 && strcmp(argv[1], "--no-output") == 0)
+	if (argc >= 2 && strcmp(argv[1], "--no-output") == 0)
 		p_parameters->plot= 0;
 	else
 		p_parameters->plot= 1;
