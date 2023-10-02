@@ -19,8 +19,8 @@
 
 void buddhaCPU(params_t* p_params, xStuff_t* x){
 	u_int32_t *histogram;
+        histogram = (u_int32_t*) calloc(p_params->resx * p_params->resy * sizeof(u_int32_t), sizeof(u_int32_t));
 	params_t* p;
-	histogram = (u_int32_t*) malloc(p_params->resx * p_params->resy * sizeof(u_int32_t));
 	p = p_params;
 	complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
 	int iter = 0;
@@ -43,8 +43,8 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 
 		for(int i = 0; i < p_params->maxiter; i++){
 			if (trajs[i] == -10) break;
-			int x = (int)map(creal(trajs[i]), -0.25, 0.75, 0, p_params->resx);
-			int y = (int)map(cimag(trajs[i]), -0.5 * invSqr2, 0.5 * invSqr2, 0, p_params->resy);
+			int x = (int)map(creal(trajs[i]), -1, 1, 0, p_params->resx);
+			int y = (int)map(cimag(trajs[i]), -1 * invSqr2, 1 * invSqr2, 0, p_params->resy);
 			if (x >= 0 && x < p_params->resx && y >= 0 && y < p_params->resy){
 				histogram[x + y * p_params->resx]++;
 			}
@@ -68,8 +68,10 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 				}
 				break;
 		}
-		if (iter % p_params -> n_points == 0)
+		if (iter % p_params -> n_points == p_params -> n_points - 1){
 			writeCheckpoint(p_params, histogram);
+			histogram = (u_int32_t*) calloc(p_params->resx * p_params->resy * sizeof(u_int32_t), sizeof(u_int32_t));
+		}
 		iter++;
 	}
 }
