@@ -24,16 +24,16 @@ def configure_logger(debug, dryrun=False, log_prefix=None):
     log_dir = Path.home() / f"{Path(__file__).stem}_LOG"
     log_dir.mkdir(exist_ok=True)
     log_file = log_dir / f"{time.strftime('%Y%m%d')}.log"
-    log_format = ( 
+    log_format = (
         f"%(asctime)s{' - DRYRUN' if dryrun else ''} - %(levelname)s - {log_prefix if log_prefix else ''}%(message)s"
-    )   
+    )
     logging.basicConfig(
         format=log_format,
         datefmt="%Y-%m-%d %H:%M:%S",
         level=logging.INFO,
         handlers=[logging.StreamHandler(), logging.FileHandler(log_file)],
         force=True,
-    )   
+    )
     if debug:
         logger.setLevel(logging.DEBUG)
     logging.getLogger("sh").setLevel(logging.WARNING)
@@ -62,27 +62,27 @@ if __name__ == '__main__':
     histogram = np.zeros((int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
     process_list = []
 
-    process_list.append(subprocess.Popen(['./buddhabroute-dev'],stdout=subprocess.PIPE))
+    process_list.append(subprocess.Popen(['./buddhabroute'],stdout=subprocess.PIPE))
     for n in range(max(int(config['IMAGE']['workers'])-1, 0)):
-        process_list.append(subprocess.Popen(['./buddhabroute-dev', '--no-output'] ,stdout=subprocess.PIPE))
+        process_list.append(subprocess.Popen(['./buddhabroute', '--no-output'] ,stdout=subprocess.PIPE))
 
     while True:
-        for n, process in enumerate(process_list): 
+        for n, process in enumerate(process_list):
             output = process.stdout.readline().decode("ascii")
             histogram = [float(x) for x in output.replace('\n', '').split(' ')[:-1]]
             try:
                 histogram = np.reshape(histogram, (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
             except ValueError:
-                logger.error(f"Wrong shape in the histogram ! Check size. Crashing.") 
+                logger.error(f"Wrong shape in the histogram ! Check size. Crashing.")
                 sys.exit()
             logger.debug(f'proc {n}: {histogram.shape}')
 
 
-#            # with compression to save bandwidth
-#            data['histogram'] = base64.b64encode(
-#                zlib.compress(
-#                    histogram.tobytes()
-#                )
-#            ).decode('utf-8')
-#
-#            r = requests.post(url, json=data, headers=headers)
+            # with compression to save bandwidth
+            data['histogram'] = base64.b64encode(
+                zlib.compress(
+                    histogram.tobytes()
+                )
+            ).decode('utf-8')
+
+            r = requests.post(url, json=data, headers=headers)
