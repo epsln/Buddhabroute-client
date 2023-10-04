@@ -69,7 +69,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 				break;
 		}
 		if (iter % p_params -> n_points == p_params -> n_points - 1){
-			//writeCheckpoint(p_params, histogram);
+			writeCheckpoint(p_params, histogram);
 			histogram = (u_int32_t*) calloc(p_params->resx * p_params->resy * sizeof(u_int32_t), sizeof(u_int32_t));
 		}
 		iter++;
