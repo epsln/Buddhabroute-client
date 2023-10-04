@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     process_list.append(subprocess.Popen([join(path, './buddhabroute')],stdout=subprocess.PIPE))
     for n in range(max(int(config['IMAGE']['workers'])-1, 0)):
-        process_list.append(subprocess.Popen([join(path, './buddhabroute', '--no-output')] ,stdout=subprocess.PIPE))
+        process_list.append(subprocess.Popen([join(path, './buddhabroute'), '--no-output'] ,stdout=subprocess.PIPE))
 
     while True:
         for n, process in enumerate(process_list):
