@@ -33,10 +33,12 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	while(1){
 		complex r = rand_complex(-4 - 4 * I, 4 + 4 * I);
 		trajs[0] = rand_complex(-4 - 4 * I, 4 + 4 * I);
+		printf("r = %lf %lf\n", creal(r), cimag(r));
+		printf("z0 = %lf %lf\n", creal(trajs[0]), cimag(trajs[0]));
 		for (int i = 1; i < p_params->maxiter; i++){
 			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
-			//if (cabs(trajs[i] - trajs[i - 1]) < 1e-5){trajs[i] = -10; break;};
-			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
+			if (i > p_params->maxiter/100. && cabs(trajs[i] - trajs[i - 1]) < 1e-5){trajs[0] = -10; break;};
+			if (cabs(trajs[i]) > 4){trajs[i] = -10; break;}
 			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
 		}
 
@@ -69,7 +71,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 				break;
 		}
 		if (iter % p_params -> n_points == p_params -> n_points - 1){
-			writeCheckpoint(p_params, histogram);
+			//writeCheckpoint(p_params, histogram);
 			histogram = (u_int32_t*) calloc(p_params->resx * p_params->resy * sizeof(u_int32_t), sizeof(u_int32_t));
 		}
 		iter++;
