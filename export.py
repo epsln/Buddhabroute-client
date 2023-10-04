@@ -42,7 +42,7 @@ if __name__ == '__main__':
     js = {}
 
     config = configparser.ConfigParser()
-    path = os.getcwd()
+    path = getcwd()
     config.read(join(path, 'config.ini'))
 
     configure_logger(debug=config['EXPORT']['debug'])
