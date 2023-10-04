@@ -42,7 +42,8 @@ if __name__ == '__main__':
     js = {}
 
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    path = os.getcwd()
+    config.read(join(path, 'config.ini'))
 
     configure_logger(debug=config['EXPORT']['debug'])
 
@@ -62,18 +63,20 @@ if __name__ == '__main__':
     histogram = np.zeros((int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
     process_list = []
 
-    process_list.append(subprocess.Popen(['./buddhabroute'],stdout=subprocess.PIPE))
+    process_list.append(subprocess.Popen([join(path, './buddhabroute')],stdout=subprocess.PIPE))
     for n in range(max(int(config['IMAGE']['workers'])-1, 0)):
-        process_list.append(subprocess.Popen(['./buddhabroute', '--no-output'] ,stdout=subprocess.PIPE))
+        process_list.append(subprocess.Popen([join(path, './buddhabroute', '--no-output')] ,stdout=subprocess.PIPE))
 
     while True:
         for n, process in enumerate(process_list):
+            logger.debug(f'proc {n}: starting')
             output = process.stdout.readline().decode("ascii")
             histogram = [float(x) for x in output.replace('\n', '').split(' ')[:-1]]
             try:
                 histogram = np.reshape(histogram, (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
             except ValueError:
                 logger.error(f"Wrong shape in the histogram ! Check size. Crashing.")
+                logger.error(histogram)
                 sys.exit()
             logger.debug(f'proc {n}: {histogram.shape}')
 
