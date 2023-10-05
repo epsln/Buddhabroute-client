@@ -36,14 +36,14 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 		for (int i = 1; i < p_params->maxiter; i++){
 			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
 			if (i > p_params->maxiter/100. && cabs(trajs[i] - trajs[i - 1]) < 1e-5){trajs[0] = -10; break;};
-			if (cabs(trajs[i]) > 4){trajs[i] = -10; break;}
+			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
 			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
 		}
 
 
 		for(int i = 0; i < p_params->maxiter; i++){
 			if (trajs[i] == -10) break;
-			int x = (int)map(creal(trajs[i]), -0.75, 0.75, 0, p_params->resx);
+			int x = (int)map(creal(trajs[i]), -0.65, 0.90, 0, p_params->resx);
 			int y = (int)map(cimag(trajs[i]), -0.75 * invSqr2, 0.75 * invSqr2, 0, p_params->resy);
 			if (x >= 0 && x < p_params->resx && y >= 0 && y < p_params->resy){
 				histogram[x + y * p_params->resx]++;
