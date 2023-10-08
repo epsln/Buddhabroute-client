@@ -28,23 +28,16 @@ source buddhabroute/bin/activate
 pip install -r requirements.txt
 ```
 
-You should modify the `config.ini` with the URL and port of running server.
-
-Finally, add a cronjob to automatically export your work
-
-```
-crontab -l > mycron
-echo "0 12 * * $(pwd)/buddhabroute/bin/activate /usr/bin/python $(pwd)/export.py" >> mycron
-#install new cron file
-crontab mycron
-rm mycron
-```
-All done !
+You should modify the `config.ini` with the URL and port of running server. You can also modify the number of iterations to do before 
+exporting your work. The sleep_time parameters controls the amount of sleep between iterations, so you can try to not burn out your poor cpu.
 
 ## Running
+Everything is done via the export.py script. 
+
 ```
-./buddhabroute
+python export.py
 ```
-Every 100K iterations, the program will save to a checkpoint file the histogram it is computing. The filename is randomised every time the program is launched.
+
+Which will launch the program and export to the provided url.
 
 I recommend using XScreensaver to manage the screensaver part. You can add computeIdle to the list of screensaver by modifying `{HOME}/.xscreensaver`. Add the full path to the executable in the programs section.
