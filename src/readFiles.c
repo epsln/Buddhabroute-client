@@ -16,8 +16,7 @@ const char* getfield(char* line, int num){
 	return NULL;
 }
 
-static int handler(void* params, const char* section, const char* name,
-                   const char* value){
+static int handler(void* params, const char* section, const char* name, const char* value){
     params_t* pconfig = (params_t*)params;
 
     #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0

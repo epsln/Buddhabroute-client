@@ -1,5 +1,6 @@
 #include "include/bmp.h"
 #include "include/math_utils.h"
+#include "include/ini.h"
 #include "include/readFiles.h"
 #include "include/config.h"
 #include "include/buddha_cpu.h"
@@ -19,19 +20,44 @@
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 
+static int handler(void* params, const char* section, const char* name, const char* value){
+    params_t* pconfig = (params_t*)params;
+
+    #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
+    if (MATCH("IMAGE", "resx")) {
+        pconfig->resx= atoi(value);
+    } else if (MATCH("IMAGE", "resy")) {
+        pconfig->resy = atoi(value);
+    } else if (MATCH("IMAGE", "resy")) {
+        pconfig->maxiter = atoi(value);
+    } else if (MATCH("EXPORT", "n_points")) {
+        pconfig->n_points = atoi(value);
+    } else if (MATCH("EXPORT", "sleep_time")) {
+        pconfig->sleep_time = atoi(value);
+    } else {
+        return 0;  /* unknown section/name, error */
+    }
+    return 1;
+}
+
 int main(int argc, char *argv[]){
 	srand(time(NULL));
 
 	params_t parameters;
 	params_t* p_parameters = &parameters;
-	p_parameters->resx = 7106;
-	p_parameters->resy = 4960;
-	p_parameters->n_points = 1e6;
-	p_parameters->maxiter = 1e6;
+	//p_parameters->resx = 7106;
+	//p_parameters->resy = 4960;
+	//p_parameters->n_points = 1e6;
+	//p_parameters->maxiter = 1e6;
 	if (argc >= 2 && strcmp(argv[1], "--no-output") == 0)
 		p_parameters->plot= 0;
 	else
 		p_parameters->plot= 1;
+
+	if (ini_parse("config.ini", handler, &parameters) < 0) {
+		printf("Can't load 'test.ini'\n");
+		return 1;
+	}
 
 	XColor blackx, blacks;
 	xStuff_t x;
