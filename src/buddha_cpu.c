@@ -68,6 +68,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 				}
 				break;
 		}
+		usleep(p_params -> sleep_time * 100);
 		if (iter % p_params -> n_points == p_params -> n_points - 1){
 			writeCheckpoint(p_params, histogram);
 			free(histogram);
