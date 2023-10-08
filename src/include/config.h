@@ -6,6 +6,7 @@ typedef struct params_t{
 	int resy;
 	int n_points;
 	int maxiter;
+	int sleep_time;
 	int plot;
 }params_t;
 
