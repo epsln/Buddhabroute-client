@@ -45,10 +45,6 @@ int main(int argc, char *argv[]){
 
 	params_t parameters;
 	params_t* p_parameters = &parameters;
-	//p_parameters->resx = 7106;
-	//p_parameters->resy = 4960;
-	//p_parameters->n_points = 1e6;
-	//p_parameters->maxiter = 1e6;
 	if (argc >= 2 && strcmp(argv[1], "--no-output") == 0)
 		p_parameters->plot= 0;
 	else
