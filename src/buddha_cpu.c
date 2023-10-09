@@ -13,10 +13,6 @@
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 
-#define MAX_SOURCE_SIZE (0x100000)
-
-
-
 void buddhaCPU(params_t* p_params, xStuff_t* x){
 	u_int32_t *histogram;
         histogram = (u_int32_t*) calloc(p_params->resx * p_params->resy * sizeof(u_int32_t), sizeof(u_int32_t));
