@@ -31,7 +31,7 @@ static int handler(void* params, const char* section, const char* name, const ch
     } else if (MATCH("COMPUTE", "resy")) {
         pconfig->maxiter = atoi(value);
     } else if (MATCH("COMPUTE", "n_points")) {
-        pconfig->n_points = atoi(value);
+        pconfig->n_points = atoll(value);
     } else if (MATCH("COMPUTE", "sleep_time")) {
         pconfig->sleep_time = atoi(value);
     } else {
