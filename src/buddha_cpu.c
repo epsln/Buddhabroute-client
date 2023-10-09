@@ -20,10 +20,8 @@
 void buddhaCPU(params_t* p_params, xStuff_t* x){
 	u_int32_t *histogram;
         histogram = (u_int32_t*) calloc(p_params->resx * p_params->resy * sizeof(u_int32_t), sizeof(u_int32_t));
-	params_t* p;
-	p = p_params;
 	complex* trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
-	int iter = 0;
+	unsigned long long iter = 0;
 	float invSqr2 = 1/sqrt(2);
 
 	int animation_state = 0;

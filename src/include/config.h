@@ -4,7 +4,7 @@
 typedef struct params_t{
 	int resx;
 	int resy;
-	int n_points;
+	unsigned long long n_points;
 	int maxiter;
 	int sleep_time;
 	int plot;
