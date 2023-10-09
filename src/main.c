@@ -24,15 +24,15 @@ static int handler(void* params, const char* section, const char* name, const ch
     params_t* pconfig = (params_t*)params;
 
     #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
-    if (MATCH("IMAGE", "resx")) {
+    if (MATCH("COMPUTE", "resx")) {
         pconfig->resx= atoi(value);
-    } else if (MATCH("IMAGE", "resy")) {
+    } else if (MATCH("COMPUTE", "resy")) {
         pconfig->resy = atoi(value);
-    } else if (MATCH("IMAGE", "resy")) {
+    } else if (MATCH("COMPUTE", "resy")) {
         pconfig->maxiter = atoi(value);
-    } else if (MATCH("EXPORT", "n_points")) {
+    } else if (MATCH("COMPUTE", "n_points")) {
         pconfig->n_points = atoi(value);
-    } else if (MATCH("EXPORT", "sleep_time")) {
+    } else if (MATCH("COMPUTE", "sleep_time")) {
         pconfig->sleep_time = atoi(value);
     } else {
         return 0;  /* unknown section/name, error */
