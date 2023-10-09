@@ -47,13 +47,14 @@ def readBuddhabroute(config, data, output):
 	output = process.stdout.readline().decode("ascii")
 	histogram = [float(x) for x in output.replace('\n', '').split(' ')[:-1]]
 	try:
-		histogram = np.reshape(histogram, (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
+		histogram = np.reshape(histogram, (int(config['COMPUTE']['resx']), int(config['COMPUTE']['resy'])))
 	except ValueError:
 		logger.error(f"Wrong shape in the histogram !")
-		logger.error(f"Expected size {int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])}.")
+		logger.error(f"Expected size {int(config['COMPUTE']['resx']), int(config['COMPUTE']['resy'])}.")
 		logger.error(f"Received size {histogram.shape}.")
 		sys.exit()
 	# with compression to save bandwidth
+	logger.debug(f"Exporting !")
 	data['histogram'] = base64.b64encode(
 		zlib.compress(
 			histogram.tobytes()
@@ -75,14 +76,14 @@ if __name__ == '__main__':
 	m = hashlib.sha256()
 	m.update(str(uuid.UUID(int = uuid.getnode())).encode())
 	data['uuid'] = m.hexdigest()
-	data['maxiter'] = config['IMAGE']['maxiter']
-	data['shape'] = (config['IMAGE']['resx'], config['IMAGE']['resy'])
-	data['function_name'] = config['IMAGE']['function_name']
+	data['maxiter'] = config['COMPUTE']['maxiter']
+	data['shape'] = (config['COMPUTE']['resx'], config['COMPUTE']['resy'])
+	data['function_name'] = config['COMPUTE']['function_name']
 	data['nickname'] = config['EXPORT']['nickname']
 	data['version'] = config['EXPORT']['version']
 	headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
 
-	histogram = np.zeros((int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
+	histogram = np.zeros((int(config['COMPUTE']['resx']), int(config['COMPUTE']['resy'])))
 	thread_list = []
 
 	#Main thread does not stop, so we can't put it in the same list as other ones
@@ -90,7 +91,7 @@ if __name__ == '__main__':
 	main_thread.start()
 
 	while True:
-		for n in range(max(int(config['IMAGE']['workers'])-1, 0)):
+		for n in range(max(int(config['EXPORT']['workers'])-1, 0)):
 			x = threading.Thread(target = readBuddhabroute, args = (config, data, False))
 			thread_list.append(x)
 			x.start()
