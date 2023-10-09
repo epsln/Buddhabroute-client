@@ -36,6 +36,16 @@ def configure_logger(debug, dryrun=False, log_prefix=None):
         logger.setLevel(logging.DEBUG)
     logging.getLogger("sh").setLevel(logging.WARNING)
 
+def readBuddhabroute():
+    output = process.stdout.readline().decode("ascii")
+    histogram = [float(x) for x in output.replace('\n', '').split(' ')[:-1]]
+    try:
+        histogram = np.reshape(histogram, (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
+    except ValueError:
+        logger.error(f"Wrong shape in the histogram ! Check size. Crashing.")
+        logger.error(histogram)
+        sys.exit()
+
 if __name__ == '__main__':
     js = {}
 
@@ -68,14 +78,6 @@ if __name__ == '__main__':
     while True:
         for n, process in enumerate(process_list):
             logger.debug(f'proc {n}: starting')
-            output = process.stdout.readline().decode("ascii")
-            histogram = [float(x) for x in output.replace('\n', '').split(' ')[:-1]]
-            try:
-                histogram = np.reshape(histogram, (int(config['IMAGE']['resx']), int(config['IMAGE']['resy'])))
-            except ValueError:
-                logger.error(f"Wrong shape in the histogram ! Check size. Crashing.")
-                logger.error(histogram)
-                sys.exit()
             logger.debug(f'proc {n}: {histogram.shape}')
 
 
