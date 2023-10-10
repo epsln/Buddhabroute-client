@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
 	while True:
 		for n in range(max(int(config['EXPORT']['workers'])-1, 0)):
-			x = threading.Thread(target = readBuddhabroute, args = (config, data, False))
+			x = threading.Thread(target = readBuddhabroute, args = (config, data, False), daemon = True)
 			thread_list.append(x)
 			x.start()
 
