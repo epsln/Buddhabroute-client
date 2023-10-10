@@ -20,7 +20,6 @@ void drawTrajs(params_t* p_params, xStuff_t* x, complex* trajs){
 
 	XSetForeground(x -> dpy, x -> g, _RGB(255, 255, 255));
 	for (int i = 0; i < p_params->maxiter; i++){
-		if (creal(trajs[i]) == -10) break;
 		float x0 = map(creal(trajs[i]), -0.5, 0.5, 0, x->wa.height);
 		float y0 = map(cimag(trajs[i]), -0.35 * sqrt(2), 0.65 * sqrt(2) , 0, x->wa.width);
 
