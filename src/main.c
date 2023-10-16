@@ -28,7 +28,7 @@ static int handler(void* params, const char* section, const char* name, const ch
         pconfig->resx= atoi(value);
     } else if (MATCH("COMPUTE", "resy")) {
         pconfig->resy = atoi(value);
-    } else if (MATCH("COMPUTE", "resy")) {
+    } else if (MATCH("COMPUTE", "maxiter")) {
         pconfig->maxiter = atoi(value);
     } else if (MATCH("COMPUTE", "n_points")) {
         pconfig->n_points = atoll(value);
