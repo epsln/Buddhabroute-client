@@ -37,7 +37,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 
 		for(int i = 0; i < p_params->maxiter; i++){
 			if (trajs[i] == -10) break;
-			int x = (int)map(creal(trajs[i]), -0.65, 0.90, 0, p_params->resx);
+			int x = (int)map(creal(trajs[i]), -0.45, 1.10, 0, p_params->resx);
 			int y = (int)map(cimag(trajs[i]), -0.75 * invSqr2, 0.75 * invSqr2, 0, p_params->resy);
 			if (x >= 0 && x < p_params->resx && y >= 0 && y < p_params->resy){
 				histogram[x + y * p_params->resx]++;
