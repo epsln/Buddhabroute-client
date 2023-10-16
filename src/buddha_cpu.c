@@ -27,17 +27,18 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	while(1){
 		usleep(p_params -> sleep_time * 1);
 		complex r = rand_complex(-4 - 4 * I, 4 + 4 * I);
-		trajs[0] = rand_complex(-4 - 4 * I, 4 + 4 * I);
+		complex z = rand_complex(-4 - 4 * I, 4 + 4 * I);
+		trajs[0] = r * z * (1 - z);
 		for (int i = 1; i < p_params->maxiter; i++){
 			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
-			if (i > p_params->maxiter/100. && cabs(trajs[i] - trajs[i - 1]) < 1e-5){trajs[0] = -10; break;};
-			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
+			if (cabs(trajs[i] - trajs[i - 1]) < 1e-6){trajs[0] = -10; break;}
+			if (cabs(trajs[i]) > 4){trajs[i] = -10; break;}
 			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
 		}
 
 		for(int i = 0; i < p_params->maxiter; i++){
 			if (trajs[i] == -10) break;
-			int x = (int)map(creal(trajs[i]), -0.45, 1.10, 0, p_params->resx);
+			int x = (int)map(creal(trajs[i]), -0.45, 1.1, 0, p_params->resx);
 			int y = (int)map(cimag(trajs[i]), -0.75 * invSqr2, 0.75 * invSqr2, 0, p_params->resy);
 			if (x >= 0 && x < p_params->resx && y >= 0 && y < p_params->resy){
 				histogram[x + y * p_params->resx]++;
