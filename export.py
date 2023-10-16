@@ -1,3 +1,4 @@
+#!/bin/python3
 import numpy as np
 
 import configparser
@@ -99,4 +100,4 @@ if __name__ == '__main__':
             x.start()
 
         for n, thread in enumerate(thread_list):
-            thread.join()   
+            thread.join()
