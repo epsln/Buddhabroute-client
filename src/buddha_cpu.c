@@ -32,7 +32,7 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 		for (int i = 1; i < p_params->maxiter; i++){
 			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
 			if (cabs(trajs[i] - trajs[i - 1]) < 1e-6){trajs[0] = -10; break;}
-			if (cabs(trajs[i]) > 4){trajs[i] = -10; break;}
+			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
 			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
 		}
 
