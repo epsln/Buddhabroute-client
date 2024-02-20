@@ -45,25 +45,28 @@ def readBuddhabroute(config, data, output, n):
     else:
         process = subprocess.Popen([join(path, './buddhabroute'), '--no-output'] ,stdout=subprocess.PIPE)
     url = f"{config['EXPORT']['url']}:{config['EXPORT']['port']}{config['EXPORT']['route']}"
-    output = process.stdout.readline().decode("ascii")
-    histogram = [float(x) for x in output.replace('\n', '').split(' ')[:-1]]
-    try:
-        histogram = np.reshape(histogram, (int(config['COMPUTE']['resx']), int(config['COMPUTE']['resy'])))
-    except ValueError:
-        logger.error(f"Wrong shape in the histogram !")
-        logger.error(f"Expected size {int(config['COMPUTE']['resx']), int(config['COMPUTE']['resy'])}.")
-        logger.error(f"Received size {histogram.shape}.")
-        sys.exit()
-    # with compression to save bandwidth
-    logger.debug(f"Exporting ! {n}")
-    logger.debug(f"{histogram.sum()}")
-    data['histogram'] = base64.b64encode(
-        zlib.compress(
-            histogram.tobytes()
-        )
-    ).decode('utf-8')
+    while True:
+        output = process.stdout.readline().decode("ascii")
+        if not output:
+            break
+        histogram = [float(x) for x in output.replace('\n', '').split(' ')[:-1]]
+        try:
+            histogram = np.reshape(histogram, (int(config['COMPUTE']['resx']), int(config['COMPUTE']['resy'])))
+        except ValueError:
+            logger.error(f"Wrong shape in the histogram !")
+            logger.error(f"Expected size {int(config['COMPUTE']['resx']), int(config['COMPUTE']['resy'])}.")
+            logger.error(f"Received size {histogram.shape}.")
+            sys.exit()
+        # with compression to save bandwidth
+        logger.debug(f"Exporting ! {n}")
+        logger.debug(f"{histogram.sum()}")
+        data['histogram'] = base64.b64encode(
+            zlib.compress(
+                histogram.tobytes()
+            )
+        ).decode('utf-8')
 
-    r = requests.post(url, json=data, headers=headers)
+        r = requests.post(url, json=data, headers=headers)
 
 if __name__ == '__main__':
     js = {}
@@ -92,12 +95,8 @@ if __name__ == '__main__':
     main_thread = threading.Thread(target = readBuddhabroute, args = (config, data, True, 0))
     main_thread.start()
 
-    while True:
-        for n in range(max(int(config['EXPORT']['workers'])-1, 0)):
-            x = threading.Thread(target = readBuddhabroute, args = (config, data, False, n), daemon = True)
-            time.sleep(2)
-            thread_list.append(x)
-            x.start()
-
-        for n, thread in enumerate(thread_list):
-            thread.join()
+    for n in range(max(int(config['EXPORT']['workers']), 0)):
+        x = threading.Thread(target = readBuddhabroute, args = (config, data, False, n), daemon = True)
+        time.sleep(2)
+        thread_list.append(x)
+        x.start()
