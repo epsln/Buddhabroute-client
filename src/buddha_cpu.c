@@ -25,15 +25,22 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 	XAllocNamedColor(x->dpy, DefaultColormapOfScreen(DefaultScreenOfDisplay(x->dpy)), "black", &blacks, &blackx);
 
 	while(1){
-		usleep(p_params -> sleep_time * 1);
-		complex r = rand_complex(-4 - 4 * I, 4 + 4 * I);
-		complex z = rand_complex(-4 - 4 * I, 4 + 4 * I);
+		if (p_params -> sleep_time > 0)
+			usleep(p_params -> sleep_time * 1);
+		complex r = rand_complex(-5 - 5 * I, 5 + 5 * I);
+		complex z = rand_complex(-5 - 5 * I, 5 + 5 * I);
+		complex zOld = 0;
+		int period = 0;
+		free(trajs);
+		trajs = (complex*) malloc(p_params->maxiter * sizeof(complex));
 		trajs[0] = r * z * (1 - z);
 		for (int i = 1; i < p_params->maxiter; i++){
 			trajs[i] = r * trajs[i - 1] * (1 - trajs[i - 1]);
-			if (cabs(trajs[i] - trajs[i - 1]) < 1e-6){trajs[0] = -10; break;}
-			if (cabs(trajs[i]) > 2){trajs[i] = -10; break;}
-			if (i == p_params->maxiter - 1){trajs[0] = -10; break;}
+			if (cabs(trajs[i] - zOld) < 1e-6 || i == p_params->maxiter - 1){trajs[0] = -10; break;}
+			if (cabs(trajs[i]) > 1e6){trajs[i] = -10; break;}
+			period++;
+			if (period > 128){zOld = trajs[i]; period = 0;}
+
 		}
 
 		for(int i = 0; i < p_params->maxiter; i++){
@@ -47,10 +54,9 @@ void buddhaCPU(params_t* p_params, xStuff_t* x){
 		if (iter % p_params -> n_points == p_params -> n_points - 1){
 			writeCheckpoint(p_params, histogram);
 			free(histogram);
-			if(p_params -> plot == 0) exit(1);
+			//if(p_params -> plot == 0) exit(1);
 			histogram = (u_int32_t*) calloc(p_params->resx * p_params->resy * sizeof(u_int32_t), sizeof(u_int32_t));
 		}
-
 		iter++;
 		if (p_params->plot == 0) continue;
 		switch (animation_state) {
